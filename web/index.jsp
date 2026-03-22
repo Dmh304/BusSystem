@@ -12,9 +12,7 @@
         } else {
             response.sendRedirect(request.getContextPath() + "/parent/dashboard");
         }
-        return;
     } else {
         response.sendRedirect(request.getContextPath() + "/login");
-        return;
     }
 %>
