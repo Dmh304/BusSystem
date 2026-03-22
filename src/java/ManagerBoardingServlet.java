@@ -58,6 +58,28 @@ public class ManagerBoardingServlet extends HttpServlet {
 
         ManifestDAO manifestDAO = new ManifestDAO();
         TripManifest manifest = manifestDAO.getManifestByManager(user.getUserId(), today, sessionType);
+        
+        // Auto-generate manifest if it doesn't exist and lock time has passed
+        if (manifest == null) {
+            boolean lockTimePassed = "MORNING".equalsIgnoreCase(sessionType)
+                    ? !demoTime.isBefore(java.time.LocalTime.of(5, 0))
+                    : !demoTime.isBefore(java.time.LocalTime.of(14, 0));
+            if (lockTimePassed) {
+                var assignment = manifestDAO.getAssignmentByManager(user.getUserId(), today, sessionType);
+                if (assignment != null) {
+                    if (manifestDAO.generateManifestFromRegistrations(
+                            assignment.getAssignmentId(), today, sessionType)) {
+                        manifest = manifestDAO.getManifestByManager(user.getUserId(), today, sessionType);
+                    }
+                }
+            }
+        }
+        
+        // Sync students if manifest exists but has no students yet
+        if (manifest != null) {
+            manifestDAO.syncManifestStudents(manifest.getManifestId(), today, sessionType);
+        }
+        
         List<ManifestStudent> students = manifest == null ? null : manifestDAO.getManifestStudents(manifest.getManifestId());
 
         request.setAttribute("pageTitle", "Manager Boarding");
@@ -65,6 +87,9 @@ public class ManagerBoardingServlet extends HttpServlet {
         request.setAttribute("manifest", manifest);
         request.setAttribute("students", students);
         request.setAttribute("canUpdate", TimeRuleUtil.canManagerUpdateManifest(sessionType, demoTime));
+        // Pass the current stop order so boarding page can disable buttons for stops not yet reached
+        int currentStopOrder = manifest != null ? manifestDAO.getCurrentStopOrder(manifest.getManifestId()) : 0;
+        request.setAttribute("currentStopOrder", currentStopOrder);
         request.getRequestDispatcher("/manager/boarding.jsp").forward(request, response);
     }
 }

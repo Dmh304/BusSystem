@@ -34,6 +34,28 @@ public class ManagerDashboardServlet extends HttpServlet {
 
         Bus bus = busDAO.getBusByManager(user.getUserId());
         TripManifest manifest = manifestDAO.getManifestByManager(user.getUserId(), today, sessionType);
+        
+        // Auto-generate manifest if it doesn't exist and lock time has passed
+        if (manifest == null) {
+            boolean lockTimePassed = "MORNING".equalsIgnoreCase(sessionType)
+                    ? !demoTime.isBefore(java.time.LocalTime.of(5, 0))
+                    : !demoTime.isBefore(java.time.LocalTime.of(14, 0));
+            if (lockTimePassed) {
+                var assignment = manifestDAO.getAssignmentByManager(user.getUserId(), today, sessionType);
+                if (assignment != null) {
+                    if (manifestDAO.generateManifestFromRegistrations(
+                            assignment.getAssignmentId(), today, sessionType)) {
+                        manifest = manifestDAO.getManifestByManager(user.getUserId(), today, sessionType);
+                    }
+                }
+            }
+        }
+        
+        // Sync students if manifest exists but has no students yet
+        if (manifest != null) {
+            manifestDAO.syncManifestStudents(manifest.getManifestId(), today, sessionType);
+        }
+        
         List<ManifestStudent> students = manifest == null ? null : manifestDAO.getManifestStudents(manifest.getManifestId());
 
         request.setAttribute("pageTitle", "Manager Dashboard");

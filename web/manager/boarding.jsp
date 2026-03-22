@@ -15,6 +15,12 @@
         <div class="card">
             <h2>Boarding Update - ${selectedSession}</h2>
             <p>Can Update: <span class="tag ${canUpdate ? 'green' : 'red'}"><strong>${canUpdate ? 'YES' : 'NO'}</strong></span></p>
+            <c:if test="${currentStopOrder > 0}">
+                <p>Bus at stop order: <strong>${currentStopOrder}</strong> &mdash; Only students at reached stops can board.</p>
+            </c:if>
+            <c:if test="${currentStopOrder == 0}">
+                <p><span class="tag orange">Trip not started yet. Start the trip in Tracking before boarding students.</span></p>
+            </c:if>
         </div>
 
         <div class="card">
@@ -27,7 +33,8 @@
                     <th>Actions</th>
                 </tr>
                 <c:forEach items="${students}" var="item">
-                    <tr>
+                    <c:set var="stopReached" value="${currentStopOrder >= item.pickupStopOrder && item.pickupStopOrder > 0}" />
+                    <tr style="${!stopReached && item.attendanceChoice eq 'BUS' ? 'opacity: 0.5;' : ''}">
                         <td>${item.studentName}</td>
                         <td>${item.pickupStopName}</td>
                         <td>${item.attendanceChoice}</td>
@@ -49,28 +56,35 @@
                         </td>
                         <td>
                             <c:if test="${item.attendanceChoice eq 'BUS'}">
-                                <div class="action-buttons">
-                                    <form action="${pageContext.request.contextPath}/manager/boarding" method="post" class="inline-form">
-                                        <input type="hidden" name="manifestStudentId" value="${item.manifestStudentId}">
-                                        <input type="hidden" name="sessionType" value="${selectedSession}">
-                                        <input type="hidden" name="boardingStatus" value="BOARDED">
-                                        <button type="submit" class="success"
-                                            ${!canUpdate || item.boardingStatus eq 'BOARDED' ? 'disabled="disabled"' : ''}
-                                            style="${item.boardingStatus eq 'BOARDED' ? 'opacity: 0.4; cursor: not-allowed;' : ''}">
-                                            BOARDING
-                                        </button>
-                                    </form>
-                                    <form action="${pageContext.request.contextPath}/manager/boarding" method="post" class="inline-form">
-                                        <input type="hidden" name="manifestStudentId" value="${item.manifestStudentId}">
-                                        <input type="hidden" name="sessionType" value="${selectedSession}">
-                                        <input type="hidden" name="boardingStatus" value="NO_SHOW">
-                                        <button type="submit" class="danger"
-                                            ${!canUpdate || item.boardingStatus eq 'NO_SHOW' ? 'disabled="disabled"' : ''}
-                                            style="${item.boardingStatus eq 'NO_SHOW' ? 'opacity: 0.4; cursor: not-allowed;' : ''}">
-                                            NO_SHOW
-                                        </button>
-                                    </form>
-                                </div>
+                                <c:choose>
+                                    <c:when test="${!stopReached}">
+                                        <span class="tag gray">Bus not at this stop yet</span>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="action-buttons">
+                                            <form action="${pageContext.request.contextPath}/manager/boarding" method="post" class="inline-form">
+                                                <input type="hidden" name="manifestStudentId" value="${item.manifestStudentId}">
+                                                <input type="hidden" name="sessionType" value="${selectedSession}">
+                                                <input type="hidden" name="boardingStatus" value="BOARDED">
+                                                <button type="submit" class="success"
+                                                    ${!canUpdate || item.boardingStatus eq 'BOARDED' ? 'disabled="disabled"' : ''}
+                                                    style="${item.boardingStatus eq 'BOARDED' ? 'opacity: 0.4; cursor: not-allowed;' : ''}">
+                                                    BOARDING
+                                                </button>
+                                            </form>
+                                            <form action="${pageContext.request.contextPath}/manager/boarding" method="post" class="inline-form">
+                                                <input type="hidden" name="manifestStudentId" value="${item.manifestStudentId}">
+                                                <input type="hidden" name="sessionType" value="${selectedSession}">
+                                                <input type="hidden" name="boardingStatus" value="NO_SHOW">
+                                                <button type="submit" class="danger"
+                                                    ${!canUpdate || item.boardingStatus eq 'NO_SHOW' ? 'disabled="disabled"' : ''}
+                                                    style="${item.boardingStatus eq 'NO_SHOW' ? 'opacity: 0.4; cursor: not-allowed;' : ''}">
+                                                    NO_SHOW
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                             </c:if>
                             <c:if test="${item.attendanceChoice ne 'BUS'}">
                                 <span class="status-notneeded">Not Required</span>

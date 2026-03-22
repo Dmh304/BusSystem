@@ -11,6 +11,7 @@ public class ManifestStudent {
     private String studentCode;
     private String studentName;
     private String pickupStopName;
+    private int pickupStopOrder;
     private String sessionType;
     private java.sql.Date tripDate;
     private String manifestStatus;
@@ -97,6 +98,14 @@ public class ManifestStudent {
 
     public void setPickupStopName(String pickupStopName) {
         this.pickupStopName = pickupStopName;
+    }
+
+    public int getPickupStopOrder() {
+        return pickupStopOrder;
+    }
+
+    public void setPickupStopOrder(int pickupStopOrder) {
+        this.pickupStopOrder = pickupStopOrder;
     }
 
     public String getSessionType() {

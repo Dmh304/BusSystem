@@ -52,6 +52,11 @@ public class ManagerManifestServlet extends HttpServlet {
             }
         }
         
+        // Sync students if manifest exists but has no students yet
+        if (manifest != null) {
+            manifestDAO.syncManifestStudents(manifest.getManifestId(), today, sessionType);
+        }
+        
         List<ManifestStudent> students = manifest == null ? null : manifestDAO.getManifestStudents(manifest.getManifestId());
 
         request.setAttribute("pageTitle", "Manager Manifest");
