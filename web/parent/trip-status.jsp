@@ -8,16 +8,16 @@
         <jsp:include page="/common/demo-time-control.jsp"></jsp:include>
 
         <div class="card">
-            <h2>Trạng thái chuyến đi</h2>
-            <p>Theo dõi học sinh đã lên xe hay chưa và xe đang ở trạm nào.</p>
+            <h2>Trip Status</h2>
+            <p>Track whether students have boarded and current bus location.</p>
         </div>
 
         <div class="card">
             <table>
                 <tr>
-                    <th>Học sinh</th>
-                    <th>Buổi sáng</th>
-                    <th>Buổi chiều</th>
+                    <th>Student</th>
+                    <th>Morning</th>
+                    <th>Afternoon</th>
                 </tr>
                 <c:forEach items="${students}" var="student">
                     <tr>
@@ -28,22 +28,22 @@
                         <td>
                             <c:choose>
                                 <c:when test="${empty statusMorningMap[student.studentId]}">
-                                    Chưa có manifest sáng
+                                    No morning manifest
                                 </c:when>
                                 <c:otherwise>
-                                    Trạng thái: <strong>${statusMorningMap[student.studentId].boardingStatus}</strong><br>
-                                    Xe đang ở: <strong>${empty statusMorningMap[student.studentId].currentStopName ? 'Chưa xuất phát' : statusMorningMap[student.studentId].currentStopName}</strong>
+                                    Status: <strong>${statusMorningMap[student.studentId].boardingStatus}</strong><br>
+                                    Bus at: <strong>${empty statusMorningMap[student.studentId].currentStopName ? 'Not Departed' : statusMorningMap[student.studentId].currentStopName}</strong>
                                 </c:otherwise>
                             </c:choose>
                         </td>
                         <td>
                             <c:choose>
                                 <c:when test="${empty statusAfternoonMap[student.studentId]}">
-                                    Chưa có manifest chiều
+                                    No afternoon manifest
                                 </c:when>
                                 <c:otherwise>
-                                    Trạng thái: <strong>${statusAfternoonMap[student.studentId].boardingStatus}</strong><br>
-                                    Xe đang ở: <strong>${empty statusAfternoonMap[student.studentId].currentStopName ? 'Chưa xuất phát' : statusAfternoonMap[student.studentId].currentStopName}</strong>
+                                    Status: <strong>${statusAfternoonMap[student.studentId].boardingStatus}</strong><br>
+                                    Bus at: <strong>${empty statusAfternoonMap[student.studentId].currentStopName ? 'Not Departed' : statusAfternoonMap[student.studentId].currentStopName}</strong>
                                 </c:otherwise>
                             </c:choose>
                         </td>

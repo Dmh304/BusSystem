@@ -44,16 +44,16 @@ public class AdminAddManagerServlet extends HttpServlet {
         if ("add".equalsIgnoreCase(action)) {
             // Validation
             if (username.isEmpty() || password.isEmpty() || fullName.isEmpty() || email.isEmpty()) {
-                message = "error:Vui lòng điền đầy đủ thông tin";
+                message = "error:Please fill in all fields";
             } else if (userDAO.isUsernameExists(username)) {
-                message = "error:Username đã tồn tại";
+                message = "error:Username already exists";
             } else {
                 // Add manager
                 int managerRoleId = userDAO.getRoleIdByName("MANAGER");
                 if (managerRoleId > 0 && userDAO.addUser(username, password, fullName, email, managerRoleId)) {
-                    message = "success:Thêm manager thành công";
+                    message = "success:Manager added successfully";
                 } else {
-                    message = "error:Thêm manager thất bại";
+                    message = "error:Failed to add manager";
                 }
             }
         }

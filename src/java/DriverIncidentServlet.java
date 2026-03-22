@@ -56,7 +56,7 @@ public class DriverIncidentServlet extends HttpServlet {
         TripManifest manifest = manifestDAO.getManifestByDriver(user.getUserId(), new Date(System.currentTimeMillis()), sessionType);
 
         if (manifest == null) {
-            SessionUtil.setError(request.getSession(), "Không tìm thấy assignment hiện tại của lái xe.");
+            SessionUtil.setError(request.getSession(), "No current assignment found for this driver.");
             response.sendRedirect(request.getContextPath() + "/driver/incident");
             return;
         }
@@ -65,9 +65,9 @@ public class DriverIncidentServlet extends HttpServlet {
         boolean ok = incidentDAO.createIncident(manifest.getAssignmentId(), user.getUserId(), title, description);
 
         if (ok) {
-            SessionUtil.setSuccess(request.getSession(), "Đã ghi nhận sự cố.");
+            SessionUtil.setSuccess(request.getSession(), "Incident reported successfully.");
         } else {
-            SessionUtil.setError(request.getSession(), "Không thể ghi nhận sự cố.");
+            SessionUtil.setError(request.getSession(), "Failed to report incident.");
         }
         response.sendRedirect(request.getContextPath() + "/driver/incident?sessionType=" + sessionType);
     }

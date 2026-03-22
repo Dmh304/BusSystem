@@ -32,9 +32,9 @@ public class DriverBusStatusServlet extends HttpServlet {
         boolean ok = busDAO.updateBusStatus(busId, status);
 
         if (ok) {
-            SessionUtil.setSuccess(request.getSession(), "Đã cập nhật tình trạng xe.");
+            SessionUtil.setSuccess(request.getSession(), "Bus status updated successfully.");
         } else {
-            SessionUtil.setError(request.getSession(), "Không thể cập nhật tình trạng xe.");
+            SessionUtil.setError(request.getSession(), "Failed to update bus status.");
         }
         response.sendRedirect(request.getContextPath() + "/driver/bus-status");
     }

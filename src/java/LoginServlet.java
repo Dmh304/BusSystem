@@ -19,7 +19,7 @@ public class LoginServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + SessionUtil.redirectDashboard(currentUser));
             return;
         }
-        request.setAttribute("pageTitle", "Đăng nhập");
+        request.setAttribute("pageTitle", "Login");
         request.getRequestDispatcher("/login.jsp").forward(request, response);
     }
 
@@ -33,8 +33,8 @@ public class LoginServlet extends HttpServlet {
         UserAccount user = userDAO.login(username, password);
 
         if (user == null) {
-            request.setAttribute("error", "Sai tên đăng nhập hoặc mật khẩu.");
-            request.setAttribute("pageTitle", "Đăng nhập");
+            request.setAttribute("error", "Invalid username or password.");
+            request.setAttribute("pageTitle", "Login");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
             return;
         }
@@ -42,7 +42,7 @@ public class LoginServlet extends HttpServlet {
         HttpSession session = request.getSession();
         SessionUtil.setCurrentUser(session, user);
         DemoTimeUtil.resetDemoTime(session);
-        SessionUtil.setSuccess(session, "Đăng nhập thành công.");
+        SessionUtil.setSuccess(session, "Login successful.");
         response.sendRedirect(request.getContextPath() + SessionUtil.redirectDashboard(user));
     }
 }

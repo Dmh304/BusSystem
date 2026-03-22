@@ -8,25 +8,25 @@
         <jsp:include page="/common/demo-time-control.jsp"></jsp:include>
 
         <div class="card">
-            <h2>Báo cáo sự cố</h2>
+            <h2>Report Incident</h2>
             <form action="${pageContext.request.contextPath}/driver/incident" method="post">
                 <input type="hidden" name="sessionType" value="${empty param.sessionType ? 'MORNING' : param.sessionType}">
-                <label>Tiêu đề</label>
+                <label>Title</label>
                 <input type="text" name="title" required>
-                <label>Mô tả</label>
+                <label>Description</label>
                 <textarea name="description" required></textarea>
-                <button type="submit">Gửi sự cố</button>
+                <button type="submit">Submit Incident</button>
             </form>
         </div>
 
         <div class="card">
-            <h3>Lịch sử sự cố</h3>
+            <h3>Incident History</h3>
             <table>
                 <tr>
-                    <th>Tiêu đề</th>
-                    <th>Mô tả</th>
-                    <th>Trạng thái</th>
-                    <th>Báo cáo lúc</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Reported At</th>
                 </tr>
                 <c:forEach items="${incidents}" var="item">
                     <tr>

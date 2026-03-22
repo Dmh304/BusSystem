@@ -14,19 +14,19 @@
 
         <div class="card">
             <h2>Manifest - ${selectedSession}</h2>
-            <p>Xe: ${empty manifest ? 'N/A' : manifest.plateNumber} | Tuyến: ${empty manifest ? 'N/A' : manifest.routeName}</p>
-            <p>Current stop: ${empty manifest.currentStopName ? 'Chưa xuất phát' : manifest.currentStopName}</p>
+            <p>Bus: ${empty manifest ? 'N/A' : manifest.plateNumber} | Route: ${empty manifest ? 'N/A' : manifest.routeName}</p>
+            <p>Current stop: ${empty manifest.currentStopName ? 'Not Departed' : manifest.currentStopName}</p>
         </div>
 
         <div class="card">
             <table>
                 <tr>
-                    <th>Mã HS</th>
-                    <th>Họ tên</th>
-                    <th>Trạm đón</th>
-                    <th>Lựa chọn</th>
+                    <th>Student Code</th>
+                    <th>Full Name</th>
+                    <th>Pickup Stop</th>
+                    <th>Choice</th>
                     <th>Boarding</th>
-                    <th>Ghi chú</th>
+                    <th>Note</th>
                 </tr>
                 <c:forEach items="${students}" var="item">
                     <tr>
@@ -34,7 +34,22 @@
                         <td>${item.studentName}</td>
                         <td>${item.pickupStopName}</td>
                         <td>${item.attendanceChoice}</td>
-                        <td>${item.boardingStatus}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${item.boardingStatus eq 'BOARDED'}">
+                                    <span class="status-boarded">BOARDED</span>
+                                </c:when>
+                                <c:when test="${item.boardingStatus eq 'NO_SHOW'}">
+                                    <span class="status-noshow">NO_SHOW</span>
+                                </c:when>
+                                <c:when test="${item.boardingStatus eq 'PENDING'}">
+                                    <span class="status-pending">PENDING</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="tag gray">${item.boardingStatus}</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                         <td>${item.note}</td>
                     </tr>
                 </c:forEach>

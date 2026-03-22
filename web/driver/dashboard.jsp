@@ -8,25 +8,25 @@
 
         <div class="grid-3">
             <div class="card">
-                <h3>Xe đang lái</h3>
+                <h3>Assigned Bus</h3>
                 <div class="stat-number">${empty bus ? '-' : bus.plateNumber}</div>
                 <div class="small">${empty bus ? '' : bus.busName}</div>
             </div>
             <div class="card">
-                <h3>Tình trạng xe</h3>
+                <h3>Bus Status</h3>
                 <div class="stat-number">${empty bus ? '-' : bus.status}</div>
             </div>
             <div class="card">
-                <h3>Sự cố đang mở</h3>
+                <h3>Open Incidents</h3>
                 <div class="stat-number">${openIncidentCount}</div>
             </div>
         </div>
 
         <div class="card">
-            <h3>Chuyến hiện tại</h3>
+            <h3>Current Trip</h3>
             <p>Session: ${selectedSession}</p>
             <p>Manifest status: ${empty manifest ? 'N/A' : manifest.manifestStatus}</p>
-            <p>Current stop: ${empty manifest.currentStopName ? 'Chưa xuất phát' : manifest.currentStopName}</p>
+            <p>Current stop: ${empty manifest.currentStopName ? 'Not Departed' : manifest.currentStopName}</p>
         </div>
     </div>
 </div>

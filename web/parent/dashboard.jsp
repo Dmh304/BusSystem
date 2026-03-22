@@ -8,41 +8,41 @@
         <jsp:include page="/common/demo-time-control.jsp"></jsp:include>
 
         <div class="card">
-            <h2>Phụ huynh - Dashboard</h2>
+            <h2>Parent - Dashboard</h2>
             <p class="small">${timeHint}</p>
         </div>
 
         <div class="grid-2">
             <div class="card">
-                <h3>Quyền chỉnh sửa</h3>
-                <p>Buổi sáng:
-                    <span class="tag ${canEditMorning ? 'green' : 'red'}">${canEditMorning ? 'Được sửa' : 'Đã khóa'}</span>
+                <h3>Edit Permissions</h3>
+                <p>Morning:
+                    <span class="tag ${canEditMorning ? 'green' : 'red'}">${canEditMorning ? 'Editable' : 'Locked'}</span>
                 </p>
-                <p>Buổi chiều:
-                    <span class="tag ${canEditAfternoon ? 'green' : 'red'}">${canEditAfternoon ? 'Được sửa' : 'Đã khóa'}</span>
+                <p>Afternoon:
+                    <span class="tag ${canEditAfternoon ? 'green' : 'red'}">${canEditAfternoon ? 'Editable' : 'Locked'}</span>
                 </p>
             </div>
 
             <div class="card">
-                <h3>Nhanh</h3>
+                <h3>Quick Links</h3>
                 <div class="button-row">
-                    <a class="button-link" href="${pageContext.request.contextPath}/parent/registration">Đăng ký chuyến</a>
-                    <a class="button-link" href="${pageContext.request.contextPath}/parent/trip-status">Xem trạng thái xe</a>
+                    <a class="button-link" href="${pageContext.request.contextPath}/parent/registration">Register Trip</a>
+                    <a class="button-link" href="${pageContext.request.contextPath}/parent/trip-status">View Trip Status</a>
                 </div>
             </div>
         </div>
 
         <div class="card">
-            <h3>Danh sách học sinh</h3>
+            <h3>Student List</h3>
             <table>
                 <tr>
-                    <th>Mã HS</th>
-                    <th>Họ tên</th>
-                    <th>Lớp</th>
-                    <th>Trạm đón</th>
-                    <th>Quản lý bởi</th>
-                    <th>Sáng</th>
-                    <th>Chiều</th>
+                    <th>Student Code</th>
+                    <th>Full Name</th>
+                    <th>Grade</th>
+                    <th>Pickup Stop</th>
+                    <th>Managed By</th>
+                    <th>Morning</th>
+                    <th>Afternoon</th>
                 </tr>
                 <c:forEach items="${students}" var="student">
                     <tr>
@@ -51,22 +51,22 @@
                         <td>${student.grade}</td>
                         <td>${student.pickupStopName}</td>
                         <td>
-                            <strong>QL: ${student.managerName}</strong><br>
-                            <strong>TK: ${student.driverName}</strong>
+                            <strong>Mgr: ${student.managerName}</strong><br>
+                            <strong>Drv: ${student.driverName}</strong>
                         </td>
                         <td>
-                            Lựa chọn:
-                            <strong>${empty morningMap[student.studentId] ? 'BUS (mặc định)' : morningMap[student.studentId].attendanceChoice}</strong>
+                            Choice:
+                            <strong>${empty morningMap[student.studentId] ? 'BUS (default)' : morningMap[student.studentId].attendanceChoice}</strong>
                             <br>
-                            Lên xe:
-                            <strong>${empty statusMorningMap[student.studentId] ? 'Chưa có manifest' : statusMorningMap[student.studentId].boardingStatus}</strong>
+                            Boarding:
+                            <strong>${empty statusMorningMap[student.studentId] ? 'No manifest' : statusMorningMap[student.studentId].boardingStatus}</strong>
                         </td>
                         <td>
-                            Lựa chọn:
-                            <strong>${empty afternoonMap[student.studentId] ? 'BUS (mặc định)' : afternoonMap[student.studentId].attendanceChoice}</strong>
+                            Choice:
+                            <strong>${empty afternoonMap[student.studentId] ? 'BUS (default)' : afternoonMap[student.studentId].attendanceChoice}</strong>
                             <br>
-                            Lên xe:
-                            <strong>${empty statusAfternoonMap[student.studentId] ? 'Chưa có manifest' : statusAfternoonMap[student.studentId].boardingStatus}</strong>
+                            Boarding:
+                            <strong>${empty statusAfternoonMap[student.studentId] ? 'No manifest' : statusAfternoonMap[student.studentId].boardingStatus}</strong>
                         </td>
                     </tr>
                 </c:forEach>

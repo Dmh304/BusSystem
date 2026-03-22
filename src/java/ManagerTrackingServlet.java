@@ -33,9 +33,9 @@ public class ManagerTrackingServlet extends HttpServlet {
         boolean ok = manifestDAO.updateCurrentRouteStop(manifestId, routeStopId);
 
         if (ok) {
-            SessionUtil.setSuccess(request.getSession(), "Đã cập nhật trạm hiện tại của xe.");
+            SessionUtil.setSuccess(request.getSession(), "Current bus stop updated successfully.");
         } else {
-            SessionUtil.setError(request.getSession(), "Không thể cập nhật trạm hiện tại.");
+            SessionUtil.setError(request.getSession(), "Failed to update current stop.");
         }
 
         response.sendRedirect(request.getContextPath() + "/manager/tracking?sessionType=" + sessionType);
