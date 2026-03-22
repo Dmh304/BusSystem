@@ -12,24 +12,14 @@
             <p class="small">${timeHint}</p>
         </div>
 
-        <div class="grid-2">
-            <div class="card">
-                <h3>Edit Permissions</h3>
-                <p>Morning:
-                    <span class="tag ${canEditMorning ? 'green' : 'red'}">${canEditMorning ? 'Editable' : 'Locked'}</span>
-                </p>
-                <p>Afternoon:
-                    <span class="tag ${canEditAfternoon ? 'green' : 'red'}">${canEditAfternoon ? 'Editable' : 'Locked'}</span>
-                </p>
-            </div>
-
-            <div class="card">
-                <h3>Quick Links</h3>
-                <div class="button-row">
-                    <a class="button-link" href="${pageContext.request.contextPath}/parent/registration">Register Trip</a>
-                    <a class="button-link" href="${pageContext.request.contextPath}/parent/trip-status">View Trip Status</a>
-                </div>
-            </div>
+        <div class="card">
+            <h3>Edit Permissions</h3>
+            <p>Morning:
+                <span class="tag ${canEditMorning ? 'green' : 'red'}">${canEditMorning ? 'Editable' : 'Locked'}</span>
+            </p>
+            <p>Afternoon:
+                <span class="tag ${canEditAfternoon ? 'green' : 'red'}">${canEditAfternoon ? 'Editable' : 'Locked'}</span>
+            </p>
         </div>
 
         <div class="card">
@@ -56,14 +46,14 @@
                         </td>
                         <td>
                             Choice:
-                            <strong>${empty morningMap[student.studentId] ? 'BUS (default)' : morningMap[student.studentId].attendanceChoice}</strong>
+                            <strong>${empty morningMap[student.studentId] ? 'not select yet' : morningMap[student.studentId].attendanceChoice}</strong>
                             <br>
                             Boarding:
                             <strong>${empty statusMorningMap[student.studentId] ? 'No manifest' : statusMorningMap[student.studentId].boardingStatus}</strong>
                         </td>
                         <td>
                             Choice:
-                            <strong>${empty afternoonMap[student.studentId] ? 'BUS (default)' : afternoonMap[student.studentId].attendanceChoice}</strong>
+                            <strong>${empty afternoonMap[student.studentId] ? 'not select yet' : afternoonMap[student.studentId].attendanceChoice}</strong>
                             <br>
                             Boarding:
                             <strong>${empty statusAfternoonMap[student.studentId] ? 'No manifest' : statusAfternoonMap[student.studentId].boardingStatus}</strong>

@@ -14,15 +14,8 @@
             <button type="submit">Login</button>
         </form>
 
-        <div class="card mt-16">
-            <h3>Demo Accounts</h3>
-            <ul>
-                <li>admin1 / 123</li>
-                <li>manager1 / 123</li>
-                <li>driver1 / 123</li>
-                <li>parent1 to parent5 / 123</li>
-            </ul>
-        </div>
+
     </div>
 </div>
-<jsp:include page="/common/footer.jsp"></jsp:include>
+</body>
+</html>
