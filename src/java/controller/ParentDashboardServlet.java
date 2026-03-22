@@ -1,3 +1,4 @@
+package controller;
 import dal.ManifestDAO;
 import dal.RegistrationDAO;
 import dal.StudentDAO;
@@ -55,3 +56,4 @@ public class ParentDashboardServlet extends HttpServlet {
         request.getRequestDispatcher("/parent/dashboard.jsp").forward(request, response);
     }
 }
+

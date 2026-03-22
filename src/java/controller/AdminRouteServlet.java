@@ -1,3 +1,4 @@
+package controller;
 import dal.RouteDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -28,3 +29,4 @@ public class AdminRouteServlet extends HttpServlet {
         request.getRequestDispatcher("/admin/routes.jsp").forward(request, response);
     }
 }
+

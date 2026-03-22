@@ -1,3 +1,4 @@
+package controller;
 import dal.StudentDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -19,3 +20,4 @@ public class AdminStudentsServlet extends HttpServlet {
         request.getRequestDispatcher("/admin/students.jsp").forward(request, response);
     }
 }
+

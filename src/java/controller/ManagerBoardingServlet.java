@@ -1,3 +1,4 @@
+package controller;
 import dal.ManifestDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -93,3 +94,4 @@ public class ManagerBoardingServlet extends HttpServlet {
         request.getRequestDispatcher("/manager/boarding.jsp").forward(request, response);
     }
 }
+

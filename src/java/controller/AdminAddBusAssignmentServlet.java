@@ -1,3 +1,4 @@
+package controller;
 import dal.BusDAO;
 import dal.RouteDAO;
 import dal.UserDAO;
@@ -93,3 +94,4 @@ public class AdminAddBusAssignmentServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/admin/add-bus-assignment");
     }
 }
+

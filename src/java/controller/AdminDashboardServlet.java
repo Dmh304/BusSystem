@@ -1,3 +1,4 @@
+package controller;
 import dal.BusDAO;
 import dal.IncidentDAO;
 import dal.StudentDAO;
@@ -29,3 +30,4 @@ public class AdminDashboardServlet extends HttpServlet {
         request.getRequestDispatcher("/admin/dashboard.jsp").forward(request, response);
     }
 }
+

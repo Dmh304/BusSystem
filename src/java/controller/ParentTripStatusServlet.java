@@ -1,3 +1,4 @@
+package controller;
 import dal.ManifestDAO;
 import dal.StudentDAO;
 import jakarta.servlet.ServletException;
@@ -41,3 +42,4 @@ public class ParentTripStatusServlet extends HttpServlet {
         request.getRequestDispatcher("/parent/trip-status.jsp").forward(request, response);
     }
 }
+
