@@ -1,3 +1,4 @@
+package controller;
 import dal.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -75,3 +76,4 @@ public class AdminUserServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/admin/users");
     }
 }
+

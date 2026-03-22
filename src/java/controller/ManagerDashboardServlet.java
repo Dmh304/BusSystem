@@ -1,3 +1,4 @@
+package controller;
 import dal.BusDAO;
 import dal.ManifestDAO;
 import jakarta.servlet.ServletException;
@@ -72,3 +73,4 @@ public class ManagerDashboardServlet extends HttpServlet {
         request.getRequestDispatcher("/manager/dashboard.jsp").forward(request, response);
     }
 }
+
