@@ -43,7 +43,7 @@ public class StudentDAO extends DBContext {
         sql.append("SELECT s.StudentID, s.ParentUserID, s.StudentCode, s.FullName, s.Gender, s.Grade, ");
         sql.append("s.DefaultRouteID, s.DefaultPickupStopID, s.DefaultDropoffStopID, s.[Status], ");
         sql.append("sp1.StopName AS PickupStopName, sp2.StopName AS DropoffStopName, ");
-        sql.append("r.RouteName, u.FullName AS ParentName ");
+        sql.append("r.RouteName, u.FullName AS ParentName, NULL AS ManagerName, NULL AS DriverName ");
         sql.append("FROM Student s ");
         sql.append("INNER JOIN StopPoint sp1 ON s.DefaultPickupStopID = sp1.StopID ");
         sql.append("INNER JOIN StopPoint sp2 ON s.DefaultDropoffStopID = sp2.StopID ");
@@ -89,7 +89,8 @@ public class StudentDAO extends DBContext {
     public Student getById(int studentId) {
         String sql = "SELECT s.StudentID, s.ParentUserID, s.StudentCode, s.FullName, s.Gender, s.Grade, "
                 + "s.DefaultRouteID, s.DefaultPickupStopID, s.DefaultDropoffStopID, s.[Status], "
-                + "sp1.StopName AS PickupStopName, sp2.StopName AS DropoffStopName, r.RouteName, u.FullName AS ParentName "
+                + "sp1.StopName AS PickupStopName, sp2.StopName AS DropoffStopName, r.RouteName, u.FullName AS ParentName, "
+                + "NULL AS ManagerName, NULL AS DriverName "
                 + "FROM Student s "
                 + "INNER JOIN StopPoint sp1 ON s.DefaultPickupStopID = sp1.StopID "
                 + "INNER JOIN StopPoint sp2 ON s.DefaultDropoffStopID = sp2.StopID "
