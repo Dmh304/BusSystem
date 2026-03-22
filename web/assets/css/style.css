@@ -42,11 +42,78 @@ a:hover {
     background: #eef2ff;
     border-radius: 8px;
     color: #1f2937;
+    border-left: 3px solid transparent;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.sidebar-box a:hover:not(.danger-link) {
+    background: #dbeafe;
+    border-left-color: #3b82f6;
+    color: #1d4ed8;
+    text-decoration: none;
+}
+
+.sidebar-box a.active {
+    background: #1e3a5f;
+    color: #ffffff;
+    border-left-color: #3b82f6;
+    font-weight: 600;
+}
+
+.sidebar-box a.active:hover {
+    background: #1e3a5f;
+    color: #ffffff;
+    text-decoration: none;
 }
 
 .sidebar-box a.danger-link {
     background: #fee2e2;
     color: #991b1b;
+    border-left-color: transparent;
+}
+
+.sidebar-box a.danger-link:hover {
+    background: #fecaca;
+    border-left-color: #dc2626;
+}
+
+/* ===== Role Color Tags ===== */
+.role-admin {
+    background: #f3e8ff; color: #7c3aed;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: bold; display: inline-block;
+}
+.role-manager {
+    background: #dbeafe; color: #1d4ed8;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: bold; display: inline-block;
+}
+.role-driver {
+    background: #fff7ed; color: #9a3412;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: bold; display: inline-block;
+}
+.role-parent {
+    background: #dcfce7; color: #166534;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: bold; display: inline-block;
+}
+
+/* ===== Bus/User Status Color Tags ===== */
+.bus-active {
+    background: #dcfce7; color: #166534;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: bold; display: inline-block;
+}
+.bus-inactive {
+    background: #fee2e2; color: #991b1b;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: bold; display: inline-block;
+}
+.bus-maintenance {
+    background: #fff7ed; color: #9a3412;
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 12px; font-weight: bold; display: inline-block;
 }
 
 .content {

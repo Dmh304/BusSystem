@@ -13,10 +13,10 @@
                 <input type="text" name="keyword" value="${keyword}" placeholder="Search by username, name, email">
                 <select name="roleName">
                     <option value="">All Roles</option>
-                    <option value="ADMIN">ADMIN</option>
-                    <option value="MANAGER">MANAGER</option>
-                    <option value="DRIVER">DRIVER</option>
-                    <option value="PARENT">PARENT</option>
+                    <option value="ADMIN" ${roleName eq 'ADMIN' ? 'selected' : ''}>ADMIN</option>
+                    <option value="MANAGER" ${roleName eq 'MANAGER' ? 'selected' : ''}>MANAGER</option>
+                    <option value="DRIVER" ${roleName eq 'DRIVER' ? 'selected' : ''}>DRIVER</option>
+                    <option value="PARENT" ${roleName eq 'PARENT' ? 'selected' : ''}>PARENT</option>
                 </select>
                 </select>
                 <button type="submit" style="padding: 8px 15px;">Filter</button>
