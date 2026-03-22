@@ -654,6 +654,79 @@ pre.code {
     display: inline-block;
 }
 
+/* ===== Sticky Top Navbar ===== */
+.top-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* ===== Destination Reached Alert ===== */
+.destination-reached-alert {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    border: 2px solid #22c55e;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    animation: slideIn 0.5s ease-out;
+}
+
+.destination-reached-alert .destination-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.destination-reached-alert .destination-text {
+    font-size: 14px;
+    color: #166534;
+    line-height: 1.5;
+}
+
+.destination-reached-alert .destination-text strong {
+    font-size: 16px;
+    display: block;
+    margin-bottom: 4px;
+    color: #14532d;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Table Scroll Wrapper with Sticky Header ===== */
+.table-scroll-wrapper {
+    max-height: 500px;
+    overflow-y: auto;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.sticky-table-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #f1f5f9;
+}
+
+.sticky-table-header th {
+    background: #f1f5f9;
+    border-bottom: 2px solid #cbd5e1;
+    font-weight: 700;
+    color: #334155;
+}
+
+/* ===== Tracking Header Card (sticky info) ===== */
+.tracking-header-card {
+    position: sticky;
+    top: 52px; /* below the navbar */
+    z-index: 50;
+    border-left: 4px solid #3b82f6;
+}
+
 @media (max-width: 992px) {
     .grid-2, .grid-3, .grid-4 {
         grid-template-columns: 1fr;
@@ -666,5 +739,10 @@ pre.code {
     
     .sidebar-nav {
         overflow-x: auto;
+    }
+
+    .tracking-header-card {
+        position: relative;
+        top: auto;
     }
 }
