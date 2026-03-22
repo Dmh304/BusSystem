@@ -31,7 +31,7 @@ public class ManagerBoardingServlet extends HttpServlet {
 
         LocalTime demoTime = DemoTimeUtil.getDemoTime(request.getSession());
         if (!TimeRuleUtil.canManagerUpdateManifest(sessionType, demoTime)) {
-            SessionUtil.setError(request.getSession(), "Chưa đến thời gian cập nhật lên xe cho " + sessionType + ".");
+            SessionUtil.setError(request.getSession(), "It is not yet time to update boarding for " + sessionType + ".");
             response.sendRedirect(request.getContextPath() + "/manager/boarding?sessionType=" + sessionType);
             return;
         }
@@ -39,9 +39,9 @@ public class ManagerBoardingServlet extends HttpServlet {
         ManifestDAO manifestDAO = new ManifestDAO();
         boolean ok = manifestDAO.updateBoardingStatus(manifestStudentId, boardingStatus);
         if (ok) {
-            SessionUtil.setSuccess(request.getSession(), "Đã cập nhật trạng thái lên xe.");
+            SessionUtil.setSuccess(request.getSession(), "Boarding status updated successfully.");
         } else {
-            SessionUtil.setError(request.getSession(), "Không thể cập nhật trạng thái lên xe.");
+            SessionUtil.setError(request.getSession(), "Failed to update boarding status.");
         }
         response.sendRedirect(request.getContextPath() + "/manager/boarding?sessionType=" + sessionType);
     }

@@ -8,17 +8,17 @@
         <jsp:include page="/common/demo-time-control.jsp"></jsp:include>
 
         <div class="card">
-            <h2>Quản lý xe</h2>
+            <h2>Bus Management</h2>
             <table>
                 <tr>
-                    <th>Biển số</th>
-                    <th>Tên xe</th>
-                    <th>Sức chứa</th>
-                    <th>Tuyến</th>
+                    <th>Plate Number</th>
+                    <th>Bus Name</th>
+                    <th>Capacity</th>
+                    <th>Route</th>
                     <th>Manager</th>
                     <th>Driver</th>
-                    <th>Trạng thái</th>
-                    <th>Cập nhật</th>
+                    <th>Status</th>
+                    <th>Update</th>
                 </tr>
                 <c:forEach items="${buses}" var="item">
                     <tr>
@@ -37,7 +37,7 @@
                                     <option value="INACTIVE">INACTIVE</option>
                                     <option value="MAINTENANCE">MAINTENANCE</option>
                                 </select>
-                                <button type="submit">Lưu</button>
+                                <button type="submit">Save</button>
                             </form>
                         </td>
                     </tr>

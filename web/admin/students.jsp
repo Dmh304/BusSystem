@@ -8,22 +8,22 @@
         <jsp:include page="/common/demo-time-control.jsp"></jsp:include>
 
         <div class="card">
-            <h2>Quản lý học sinh</h2>
+            <h2>Student Management</h2>
             <form action="${pageContext.request.contextPath}/admin/students" method="get">
-                <input type="text" name="keyword" value="${keyword}" placeholder="Tìm theo mã, tên, phụ huynh">
-                <button type="submit">Tìm kiếm</button>
+                <input type="text" name="keyword" value="${keyword}" placeholder="Search by code, name, parent">
+                <button type="submit">Search</button>
             </form>
         </div>
 
         <div class="card">
             <table>
                 <tr>
-                    <th>Mã HS</th>
-                    <th>Họ tên</th>
-                    <th>Lớp</th>
-                    <th>Phụ huynh</th>
-                    <th>Trạm đón</th>
-                    <th>Tuyến</th>
+                    <th>Student Code</th>
+                    <th>Full Name</th>
+                    <th>Grade</th>
+                    <th>Parent</th>
+                    <th>Pickup Stop</th>
+                    <th>Route</th>
                 </tr>
                 <c:forEach items="${students}" var="item">
                     <tr>

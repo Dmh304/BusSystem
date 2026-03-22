@@ -27,9 +27,9 @@ public class AdminBusServlet extends HttpServlet {
         boolean ok = busDAO.updateBusStatus(busId, status);
 
         if (ok) {
-            SessionUtil.setSuccess(request.getSession(), "Đã cập nhật trạng thái xe.");
+            SessionUtil.setSuccess(request.getSession(), "Bus status updated successfully.");
         } else {
-            SessionUtil.setError(request.getSession(), "Không thể cập nhật trạng thái xe.");
+            SessionUtil.setError(request.getSession(), "Failed to update bus status.");
         }
         response.sendRedirect(request.getContextPath() + "/admin/buses");
     }

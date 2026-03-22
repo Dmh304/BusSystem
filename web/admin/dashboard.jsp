@@ -8,19 +8,19 @@
 
         <div class="grid-4">
             <div class="card">
-                <h3>Người dùng</h3>
+                <h3>Users</h3>
                 <div class="stat-number">${userCount}</div>
             </div>
             <div class="card">
-                <h3>Học sinh</h3>
+                <h3>Students</h3>
                 <div class="stat-number">${studentCount}</div>
             </div>
             <div class="card">
-                <h3>Xe hoạt động</h3>
+                <h3>Active Buses</h3>
                 <div class="stat-number">${busCount}</div>
             </div>
             <div class="card">
-                <h3>Sự cố mở</h3>
+                <h3>Open Incidents</h3>
                 <div class="stat-number">${openIncidentCount}</div>
             </div>
         </div>

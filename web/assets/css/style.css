@@ -113,6 +113,20 @@ button, .button-link {
     background: #0f172a;
     color: #ffffff;
     cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+button:hover:not(:disabled), .button-link:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
 }
 
 button.secondary {
@@ -127,12 +141,29 @@ button.success {
     background: #15803d;
 }
 
+button.danger {
+    background: #dc2626;
+}
+
+button.danger:hover:not(:disabled) {
+    background: #b91c1c;
+}
+
+button.info {
+    background: #2563eb;
+}
+
+button.info:hover:not(:disabled) {
+    background: #1d4ed8;
+}
+
 form {
     margin: 0;
 }
 
 input[type=text],
 input[type=password],
+input[type=email],
 textarea,
 select {
     width: 100%;
@@ -159,6 +190,7 @@ table td {
     text-align: left;
 }
 
+/* ===== Status Tags ===== */
 .tag {
     display: inline-block;
     padding: 4px 10px;
@@ -188,12 +220,185 @@ table td {
     color: #374151;
 }
 
+.tag.orange {
+    background: #fff7ed;
+    color: #9a3412;
+}
+
+.tag.purple {
+    background: #f3e8ff;
+    color: #7c3aed;
+}
+
+/* ===== Boarding Status Colors ===== */
+.status-boarded {
+    background: #dcfce7;
+    color: #166534;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.status-noshow {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.status-pending {
+    background: #fef3c7;
+    color: #92400e;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.status-notneeded {
+    background: #e5e7eb;
+    color: #6b7280;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+/* ===== Tracking Stop Row Colors ===== */
+.stop-passed {
+    background: #f0fdf4 !important;
+}
+
+.stop-passed td {
+    color: #166534;
+}
+
+.stop-current {
+    background: #dbeafe !important;
+    font-weight: bold;
+}
+
+.stop-current td {
+    color: #1d4ed8;
+}
+
+.stop-upcoming {
+    background: #f9fafb !important;
+}
+
+.stop-upcoming td {
+    color: #9ca3af;
+}
+
+/* ===== Demo Time Control ===== */
+.time-display {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+
+.time-display .time-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.time-display .time-item.real-time {
+    background: #dbeafe;
+    color: #1d4ed8;
+    border: 1px solid #93c5fd;
+}
+
+.time-display .time-item.sim-time {
+    background: #fff7ed;
+    color: #9a3412;
+    border: 1px solid #fdba74;
+}
+
+.time-display .time-item .time-label {
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.time-display .time-item .time-value {
+    font-size: 18px;
+    font-weight: bold;
+    font-family: 'Courier New', monospace;
+}
+
+/* ===== Tracking Trip Status ===== */
+.trip-status {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.trip-status.not-started {
+    background: #e5e7eb;
+    color: #374151;
+}
+
+.trip-status.in-progress {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.trip-status.completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+/* ===== Auto Refresh Indicator ===== */
+.auto-refresh-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: #f1f5f9;
+    border-radius: 8px;
+    font-size: 12px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.auto-refresh-bar .pulse-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+    100% { opacity: 1; transform: scale(1); }
+}
+
+/* ===== Button Row ===== */
 .button-row {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
 }
 
+/* ===== Layout ===== */
 .login-page {
     min-height: calc(100vh - 52px);
     display: flex;
@@ -246,6 +451,8 @@ table td {
     padding: 8px 14px;
     background: #e2e8f0;
     border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s;
 }
 
 .session-tabs a.active {
@@ -253,9 +460,25 @@ table td {
     color: #ffffff;
 }
 
+.session-tabs a:hover:not(.active) {
+    background: #cbd5e1;
+    text-decoration: none;
+}
+
 pre.code {
     white-space: pre-wrap;
     word-break: break-word;
+}
+
+/* ===== Action Button Group ===== */
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.action-buttons form {
+    display: inline-block;
 }
 
 @media (max-width: 992px) {

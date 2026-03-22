@@ -62,7 +62,7 @@ public class AdminAddBusAssignmentServlet extends HttpServlet {
         if ("assign".equalsIgnoreCase(action)) {
             // Validation
             if (busIdStr.isEmpty() || routeIdStr.isEmpty() || managerUserIdStr.isEmpty() || driverUserIdStr.isEmpty()) {
-                message = "error:Vui lòng điền đầy đủ thông tin";
+                message = "error:Please fill in all fields";
             } else {
                 try {
                     int busId = Integer.parseInt(busIdStr);
@@ -71,12 +71,12 @@ public class AdminAddBusAssignmentServlet extends HttpServlet {
                     int driverUserId = Integer.parseInt(driverUserIdStr);
 
                     if (busDAO.createBusAssignment(busId, routeId, managerUserId, driverUserId)) {
-                        message = "success:Gán xe cho quản lý thành công";
+                        message = "success:Bus assignment created successfully";
                     } else {
-                        message = "error:Gán xe thất bại";
+                        message = "error:Failed to assign bus";
                     }
                 } catch (NumberFormatException e) {
-                    message = "error:Dữ liệu không hợp lệ";
+                    message = "error:Invalid data";
                 }
             }
         }

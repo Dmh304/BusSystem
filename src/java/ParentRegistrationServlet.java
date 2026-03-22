@@ -42,7 +42,7 @@ public class ParentRegistrationServlet extends HttpServlet {
                 : TimeRuleUtil.canParentEditAfternoon(demoTime);
 
         if (!allow) {
-            SessionUtil.setError(request.getSession(), "Khung thời gian hiện tại không cho phép sửa đăng ký " + sessionType + ".");
+            SessionUtil.setError(request.getSession(), "Registration for " + sessionType + " cannot be modified at this time.");
             response.sendRedirect(request.getContextPath() + "/parent/registration");
             return;
         }
@@ -56,9 +56,9 @@ public class ParentRegistrationServlet extends HttpServlet {
                 note);
 
         if (ok) {
-            SessionUtil.setSuccess(request.getSession(), "Đã lưu đăng ký cho học sinh.");
+            SessionUtil.setSuccess(request.getSession(), "Registration saved for student.");
         } else {
-            SessionUtil.setError(request.getSession(), "Không thể lưu đăng ký.");
+            SessionUtil.setError(request.getSession(), "Failed to save registration.");
         }
         response.sendRedirect(request.getContextPath() + "/parent/registration");
     }

@@ -8,7 +8,7 @@
         <jsp:include page="/common/demo-time-control.jsp"></jsp:include>
 
         <div class="card">
-            <h2>Thêm Tài xế mới</h2>
+            <h2>Add New Driver</h2>
         </div>
 
         <div class="card">
@@ -17,26 +17,26 @@
                 
                 <div>
                     <label for="username">Username:</label>
-                    <input type="text" id="username" name="username" required placeholder="Nhập username">
+                    <input type="text" id="username" name="username" required placeholder="Enter username">
                 </div>
                 
                 <div>
                     <label for="password">Password:</label>
-                    <input type="password" id="password" name="password" required placeholder="Nhập mật khẩu">
+                    <input type="password" id="password" name="password" required placeholder="Enter password">
                 </div>
                 
                 <div>
-                    <label for="fullName">Họ tên:</label>
-                    <input type="text" id="fullName" name="fullName" required placeholder="Nhập họ tên">
+                    <label for="fullName">Full Name:</label>
+                    <input type="text" id="fullName" name="fullName" required placeholder="Enter full name">
                 </div>
                 
                 <div>
                     <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required placeholder="Nhập email">
+                    <input type="email" id="email" name="email" required placeholder="Enter email">
                 </div>
                 
-                <button type="submit" class="success">Thêm Tài xế</button>
-                <a href="${pageContext.request.contextPath}/admin/dashboard" class="button">Hủy</a>
+                <button type="submit" class="success">Add Driver</button>
+                <a href="${pageContext.request.contextPath}/admin/dashboard" class="button">Cancel</a>
             </form>
         </div>
     </div>

@@ -47,20 +47,20 @@ public class TimeRuleUtil {
 
     public static String getParentHint(LocalTime time) {
         if (canParentEditMorning(time) && canParentEditAfternoon(time)) {
-            return "Phụ huynh đang được phép đăng ký cả buổi sáng và buổi chiều.";
+            return "Parents can register for both morning and afternoon sessions.";
         }
         if (isMorningLocked(time)) {
-            return "Buổi sáng đã chốt danh sách. Chỉ quản lý xe xem manifest.";
+            return "Morning registration is locked. Only the bus manager can view the manifest.";
         }
         if (isMorningRunning(time)) {
-            return "Buổi sáng đang chạy. Quản lý xe có thể cập nhật lên xe.";
+            return "Morning session is running. The bus manager can update boarding.";
         }
         if (isAfternoonLocked(time)) {
-            return "Buổi chiều đã chốt danh sách. Phụ huynh không thể sửa đăng ký.";
+            return "Afternoon registration is locked. Parents cannot edit.";
         }
         if (isAfternoonRunning(time)) {
-            return "Buổi chiều đang chạy. Quản lý xe có thể cập nhật lên xe.";
+            return "Afternoon session is running. The bus manager can update boarding.";
         }
-        return "Hệ thống đang ở chế độ mô phỏng.";
+        return "System is in simulation mode.";
     }
 }

@@ -8,7 +8,7 @@
         <jsp:include page="/common/demo-time-control.jsp"></jsp:include>
 
         <div class="card">
-            <h2>Quản lý tuyến</h2>
+            <h2>Route Management</h2>
             <form action="${pageContext.request.contextPath}/admin/routes" method="get">
                 <select name="routeId">
                     <c:forEach items="${routes}" var="route">
@@ -17,17 +17,17 @@
                         </option>
                     </c:forEach>
                 </select>
-                <button type="submit">Xem trạm</button>
+                <button type="submit">View Stops</button>
             </form>
         </div>
 
         <div class="card">
             <table>
                 <tr>
-                    <th>STT</th>
-                    <th>Trạm</th>
-                    <th>Giờ sáng</th>
-                    <th>Giờ chiều</th>
+                    <th>Order</th>
+                    <th>Stop</th>
+                    <th>Morning Time</th>
+                    <th>Afternoon Time</th>
                 </tr>
                 <c:forEach items="${routeStops}" var="item">
                     <tr>

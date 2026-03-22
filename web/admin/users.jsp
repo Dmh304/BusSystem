@@ -8,17 +8,17 @@
         <jsp:include page="/common/demo-time-control.jsp"></jsp:include>
 
         <div class="card">
-            <h2>Quản lý người dùng</h2>
+            <h2>User Management</h2>
             <form action="${pageContext.request.contextPath}/admin/users" method="get">
-                <input type="text" name="keyword" value="${keyword}" placeholder="Tìm theo username, tên, email">
+                <input type="text" name="keyword" value="${keyword}" placeholder="Search by username, name, email">
                 <select name="roleName">
-                    <option value="">Tất cả vai trò</option>
+                    <option value="">All Roles</option>
                     <option value="ADMIN">ADMIN</option>
                     <option value="MANAGER">MANAGER</option>
                     <option value="DRIVER">DRIVER</option>
                     <option value="PARENT">PARENT</option>
                 </select>
-                <button type="submit">Lọc</button>
+                <button type="submit">Filter</button>
             </form>
         </div>
 
@@ -27,7 +27,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Username</th>
-                    <th>Họ tên</th>
+                    <th>Full Name</th>
                     <th>Email</th>
                     <th>Role</th>
                     <th>Status</th>

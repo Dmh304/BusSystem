@@ -13,36 +13,67 @@
         </div>
 
         <div class="card">
-            <h2>Cập nhật boarding - ${selectedSession}</h2>
-            <p>Được cập nhật: <strong>${canUpdate ? 'YES' : 'NO'}</strong></p>
+            <h2>Boarding Update - ${selectedSession}</h2>
+            <p>Can Update: <span class="tag ${canUpdate ? 'green' : 'red'}"><strong>${canUpdate ? 'YES' : 'NO'}</strong></span></p>
         </div>
 
         <div class="card">
             <table>
                 <tr>
-                    <th>HS</th>
-                    <th>Trạm đón</th>
-                    <th>Lựa chọn</th>
-                    <th>Boarding hiện tại</th>
-                    <th>Hành động</th>
+                    <th>Student</th>
+                    <th>Pickup Stop</th>
+                    <th>Choice</th>
+                    <th>Current Status</th>
+                    <th>Actions</th>
                 </tr>
                 <c:forEach items="${students}" var="item">
                     <tr>
                         <td>${item.studentName}</td>
                         <td>${item.pickupStopName}</td>
                         <td>${item.attendanceChoice}</td>
-                        <td>${item.boardingStatus}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${item.boardingStatus eq 'BOARDED'}">
+                                    <span class="status-boarded">BOARDED</span>
+                                </c:when>
+                                <c:when test="${item.boardingStatus eq 'NO_SHOW'}">
+                                    <span class="status-noshow">NO_SHOW</span>
+                                </c:when>
+                                <c:when test="${item.boardingStatus eq 'PENDING'}">
+                                    <span class="status-pending">PENDING</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="tag gray">${item.boardingStatus}</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                         <td>
                             <c:if test="${item.attendanceChoice eq 'BUS'}">
-                                <form action="${pageContext.request.contextPath}/manager/boarding" method="post" class="inline-form">
-                                    <input type="hidden" name="manifestStudentId" value="${item.manifestStudentId}">
-                                    <input type="hidden" name="sessionType" value="${selectedSession}">
-                                    <input type="hidden" name="boardingStatus" value="BOARDED">
-                                    <button type="submit" class="success" ${!canUpdate || item.boardingStatus eq 'BOARDED' ? 'disabled="disabled"' : ''} style="${item.boardingStatus eq 'BOARDED' ? 'opacity: 0.5; cursor: not-allowed;' : ''}">BOARDED</button>
-                                </form>
+                                <div class="action-buttons">
+                                    <form action="${pageContext.request.contextPath}/manager/boarding" method="post" class="inline-form">
+                                        <input type="hidden" name="manifestStudentId" value="${item.manifestStudentId}">
+                                        <input type="hidden" name="sessionType" value="${selectedSession}">
+                                        <input type="hidden" name="boardingStatus" value="BOARDED">
+                                        <button type="submit" class="success"
+                                            ${!canUpdate || item.boardingStatus eq 'BOARDED' ? 'disabled="disabled"' : ''}
+                                            style="${item.boardingStatus eq 'BOARDED' ? 'opacity: 0.4; cursor: not-allowed;' : ''}">
+                                            BOARDING
+                                        </button>
+                                    </form>
+                                    <form action="${pageContext.request.contextPath}/manager/boarding" method="post" class="inline-form">
+                                        <input type="hidden" name="manifestStudentId" value="${item.manifestStudentId}">
+                                        <input type="hidden" name="sessionType" value="${selectedSession}">
+                                        <input type="hidden" name="boardingStatus" value="NO_SHOW">
+                                        <button type="submit" class="danger"
+                                            ${!canUpdate || item.boardingStatus eq 'NO_SHOW' ? 'disabled="disabled"' : ''}
+                                            style="${item.boardingStatus eq 'NO_SHOW' ? 'opacity: 0.4; cursor: not-allowed;' : ''}">
+                                            NO_SHOW
+                                        </button>
+                                    </form>
+                                </div>
                             </c:if>
                             <c:if test="${item.attendanceChoice ne 'BUS'}">
-                                Không cần điểm danh
+                                <span class="status-notneeded">Not Required</span>
                             </c:if>
                         </td>
                     </tr>
@@ -52,4 +83,3 @@
     </div>
 </div>
 <jsp:include page="/common/footer.jsp"></jsp:include>
-

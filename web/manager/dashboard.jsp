@@ -14,41 +14,41 @@
 
         <div class="grid-4">
             <div class="card">
-                <h3>Xe phụ trách</h3>
+                <h3>Assigned Bus</h3>
                 <div class="stat-number">${empty bus ? '-' : bus.plateNumber}</div>
                 <div class="small">${empty bus ? '' : bus.busName}</div>
             </div>
             <div class="card">
-                <h3>Tuyến</h3>
+                <h3>Route</h3>
                 <div class="stat-number">${empty bus ? '-' : bus.routeName}</div>
             </div>
             <div class="card">
-                <h3>Học sinh BUS</h3>
+                <h3>BUS Students</h3>
                 <div class="stat-number">${empty busCount ? 0 : busCount}</div>
             </div>
             <div class="card">
-                <h3>Đã lên xe</h3>
+                <h3>Boarded</h3>
                 <div class="stat-number">${empty boardedCount ? 0 : boardedCount}</div>
             </div>
         </div>
 
         <div class="card">
-            <h3>Thông tin manifest</h3>
+            <h3>Manifest Info</h3>
             <p>Session: <strong>${selectedSession}</strong></p>
             <p>Manifest status: <strong>${empty manifest ? 'N/A' : manifest.manifestStatus}</strong></p>
-            <p>Trạm hiện tại: <strong>${empty manifest.currentStopName ? 'Chưa xuất phát' : manifest.currentStopName}</strong></p>
-            <p>Quyền cập nhật lên xe:
-                <span class="tag ${canUpdate ? 'green' : 'red'}">${canUpdate ? 'Được cập nhật' : 'Chưa tới giờ cập nhật'}</span>
+            <p>Current stop: <strong>${empty manifest.currentStopName ? 'Not Departed' : manifest.currentStopName}</strong></p>
+            <p>Boarding update permission:
+                <span class="tag ${canUpdate ? 'green' : 'red'}">${canUpdate ? 'Can Update' : 'Not Yet Available'}</span>
             </p>
         </div>
 
         <div class="card">
-            <h3>Danh sách nhanh</h3>
+            <h3>Quick List</h3>
             <table>
                 <tr>
-                    <th>HS</th>
-                    <th>Trạm đón</th>
-                    <th>Lựa chọn</th>
+                    <th>Student</th>
+                    <th>Pickup Stop</th>
+                    <th>Choice</th>
                     <th>Boarding</th>
                 </tr>
                 <c:forEach items="${students}" var="item">
@@ -56,7 +56,22 @@
                         <td>${item.studentName}</td>
                         <td>${item.pickupStopName}</td>
                         <td>${item.attendanceChoice}</td>
-                        <td>${item.boardingStatus}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${item.boardingStatus eq 'BOARDED'}">
+                                    <span class="status-boarded">BOARDED</span>
+                                </c:when>
+                                <c:when test="${item.boardingStatus eq 'NO_SHOW'}">
+                                    <span class="status-noshow">NO_SHOW</span>
+                                </c:when>
+                                <c:when test="${item.boardingStatus eq 'PENDING'}">
+                                    <span class="status-pending">PENDING</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="tag gray">${item.boardingStatus}</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                     </tr>
                 </c:forEach>
             </table>

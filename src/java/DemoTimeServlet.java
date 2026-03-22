@@ -35,13 +35,13 @@ public class DemoTimeServlet extends HttpServlet {
             manifestDAO.deleteManifestsByDate(today);
             
             SessionUtil.setSuccess(request.getSession(), 
-                "✅ Đã reset hệ thống: Thời gian mô phỏng → 4:30 AM, Đặt lại đăng ký học sinh, Xóa lịch trình xe.");
+                "System reset complete: Simulation time set to 4:30 AM, student registrations cleared, bus schedules cleared.");
         } else if (value != null && !value.trim().isEmpty()) {
             try {
                 DemoTimeUtil.setDemoTime(request.getSession(), LocalTime.parse(value));
-                SessionUtil.setSuccess(request.getSession(), "Đã cập nhật thời gian mô phỏng: " + value);
+                SessionUtil.setSuccess(request.getSession(), "Simulation time updated to: " + value);
             } catch (Exception e) {
-                SessionUtil.setError(request.getSession(), "Thời gian mô phỏng không hợp lệ.");
+                SessionUtil.setError(request.getSession(), "Invalid simulation time.");
             }
         }
 
