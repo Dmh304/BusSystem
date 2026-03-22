@@ -24,7 +24,7 @@
                     <div>
                         <h4>Morning Session</h4>
                         <p>Current:
-                            <strong>${empty morningMap[student.studentId] ? 'BUS (default)' : morningMap[student.studentId].attendanceChoice}</strong>
+                            <strong>${empty morningMap[student.studentId] ? 'not select yet' : morningMap[student.studentId].attendanceChoice}</strong>
                         </p>
                         <form action="${pageContext.request.contextPath}/parent/registration" method="post">
                             <input type="hidden" name="studentId" value="${student.studentId}">
@@ -42,7 +42,7 @@
                     <div>
                         <h4>Afternoon Session</h4>
                         <p>Current:
-                            <strong>${empty afternoonMap[student.studentId] ? 'BUS (default)' : afternoonMap[student.studentId].attendanceChoice}</strong>
+                            <strong>${empty afternoonMap[student.studentId] ? 'not select yet' : afternoonMap[student.studentId].attendanceChoice}</strong>
                         </p>
                         <form action="${pageContext.request.contextPath}/parent/registration" method="post">
                             <input type="hidden" name="studentId" value="${student.studentId}">

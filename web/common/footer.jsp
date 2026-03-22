@@ -1,6 +1,6 @@
 <footer class="footer">
     <div class="footer-inner">
-        BusManagementSystem - Java Servlet / JSP / JDBC Demo
+        Contact: dangisden@gmail.com
     </div>
 </footer>
 </body>
