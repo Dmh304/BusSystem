@@ -140,6 +140,44 @@ public class UserDAO extends DBContext {
         return false;
     }
 
+    public boolean updateUser(int userId, String fullName, String email, int roleId, String status) {
+        String sql = "UPDATE UserAccount SET FullName = ?, Email = ?, RoleID = ?, [Status] = ? WHERE UserID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, fullName);
+            ps.setString(2, email);
+            ps.setInt(3, roleId);
+            ps.setString(4, status);
+            ps.setInt(5, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteUser(int userId) {
+        String sql = "DELETE FROM UserAccount WHERE UserID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateUserStatus(int userId, String status) {
+        String sql = "UPDATE UserAccount SET [Status] = ? WHERE UserID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, status);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean isUsernameExists(String username) {
         String sql = "SELECT COUNT(*) FROM UserAccount WHERE Username = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {

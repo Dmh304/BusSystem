@@ -78,6 +78,45 @@ public class BusDAO extends DBContext {
         return false;
     }
 
+    public boolean addBus(String plateNumber, String busName, int capacity) {
+        String sql = "INSERT INTO Bus (PlateNumber, BusName, Capacity, [Status]) VALUES (?, ?, ?, 'ACTIVE')";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, plateNumber);
+            ps.setString(2, busName);
+            ps.setInt(3, capacity);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateBus(int busId, String plateNumber, String busName, int capacity, String status) {
+        String sql = "UPDATE Bus SET PlateNumber = ?, BusName = ?, Capacity = ?, [Status] = ? WHERE BusID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, plateNumber);
+            ps.setString(2, busName);
+            ps.setInt(3, capacity);
+            ps.setString(4, status);
+            ps.setInt(5, busId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteBus(int busId) {
+        String sql = "UPDATE Bus SET [Status] = 'INACTIVE' WHERE BusID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, busId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     private Bus getAssignedBus(String sql, int userId) {
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, userId);
@@ -131,6 +170,17 @@ public class BusDAO extends DBContext {
             ps.setInt(2, routeId);
             ps.setInt(3, managerUserId);
             ps.setInt(4, driverUserId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deactivateBusAssignments(int busId) {
+        String sql = "UPDATE BusAssignment SET [Status] = 'INACTIVE' WHERE BusID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, busId);
             return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
