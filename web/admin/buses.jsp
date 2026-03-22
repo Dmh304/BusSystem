@@ -28,14 +28,29 @@
                         <td>${item.routeName}</td>
                         <td>${item.managerName}</td>
                         <td>${item.driverName}</td>
-                        <td>${item.status}</td>
+                        <td>
+                            <c:choose>
+                                <c:when test="${item.status eq 'ACTIVE'}">
+                                    <span class="bus-active">ACTIVE</span>
+                                </c:when>
+                                <c:when test="${item.status eq 'INACTIVE'}">
+                                    <span class="bus-inactive">INACTIVE</span>
+                                </c:when>
+                                <c:when test="${item.status eq 'MAINTENANCE'}">
+                                    <span class="bus-maintenance">MAINTENANCE</span>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="tag gray">${item.status}</span>
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
                         <td>
                             <form action="${pageContext.request.contextPath}/admin/buses" method="post">
                                 <input type="hidden" name="busId" value="${item.busId}">
                                 <select name="status">
-                                    <option value="ACTIVE">ACTIVE</option>
-                                    <option value="INACTIVE">INACTIVE</option>
-                                    <option value="MAINTENANCE">MAINTENANCE</option>
+                                    <option value="ACTIVE" ${item.status eq 'ACTIVE' ? 'selected' : ''}>ACTIVE</option>
+                                    <option value="INACTIVE" ${item.status eq 'INACTIVE' ? 'selected' : ''}>INACTIVE</option>
+                                    <option value="MAINTENANCE" ${item.status eq 'MAINTENANCE' ? 'selected' : ''}>MAINTENANCE</option>
                                 </select>
                                 <button type="submit">Save</button>
                             </form>
