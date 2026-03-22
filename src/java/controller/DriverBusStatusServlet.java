@@ -1,3 +1,4 @@
+package controller;
 import dal.BusDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -39,3 +40,4 @@ public class DriverBusStatusServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/driver/bus-status");
     }
 }
+

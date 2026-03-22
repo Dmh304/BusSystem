@@ -1,3 +1,4 @@
+package controller;
 import dal.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -46,3 +47,4 @@ public class LoginServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + SessionUtil.redirectDashboard(user));
     }
 }
+

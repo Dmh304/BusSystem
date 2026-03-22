@@ -1,15 +1,14 @@
+package controller;
 import dal.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import model.UserAccount;
 import util.SessionUtil;
 
-public class AdminAddDriverServlet extends HttpServlet {
+public class AdminAddManagerServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -21,12 +20,8 @@ public class AdminAddDriverServlet extends HttpServlet {
             return;
         }
 
-        UserDAO userDAO = new UserDAO();
-        List<UserAccount> managers = userDAO.getAllUsers(null, "MANAGER");
-        
-        request.setAttribute("pageTitle", "Add Driver");
-        request.setAttribute("managers", managers);
-        request.getRequestDispatcher("/admin/add-driver.jsp").forward(request, response);
+        request.setAttribute("pageTitle", "Add Manager");
+        request.getRequestDispatcher("/admin/add-manager.jsp").forward(request, response);
     }
 
     @Override
@@ -54,12 +49,12 @@ public class AdminAddDriverServlet extends HttpServlet {
             } else if (userDAO.isUsernameExists(username)) {
                 message = "error:Username already exists";
             } else {
-                // Add driver
-                int driverRoleId = userDAO.getRoleIdByName("DRIVER");
-                if (driverRoleId > 0 && userDAO.addUser(username, password, fullName, email, driverRoleId)) {
-                    message = "success:Driver added successfully";
+                // Add manager
+                int managerRoleId = userDAO.getRoleIdByName("MANAGER");
+                if (managerRoleId > 0 && userDAO.addUser(username, password, fullName, email, managerRoleId)) {
+                    message = "success:Manager added successfully";
                 } else {
-                    message = "error:Failed to add driver";
+                    message = "error:Failed to add manager";
                 }
             }
         }
@@ -73,6 +68,7 @@ public class AdminAddDriverServlet extends HttpServlet {
             request.getSession().setAttribute("messageType", "error");
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/add-driver");
+        response.sendRedirect(request.getContextPath() + "/admin/add-manager");
     }
 }
+

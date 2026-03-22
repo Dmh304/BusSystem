@@ -1,3 +1,4 @@
+package controller;
 import dal.BusDAO;
 import dal.IncidentDAO;
 import dal.ManifestDAO;
@@ -72,3 +73,4 @@ public class DriverIncidentServlet extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/driver/incident?sessionType=" + sessionType);
     }
 }
+

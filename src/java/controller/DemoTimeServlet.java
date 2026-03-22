@@ -1,3 +1,4 @@
+package controller;
 import dal.ManifestDAO;
 import dal.RegistrationDAO;
 import jakarta.servlet.ServletException;
@@ -61,3 +62,4 @@ public class DemoTimeServlet extends HttpServlet {
         response.sendRedirect(referer);
     }
 }
+

@@ -17,79 +17,79 @@
 
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>LoginServlet</servlet-class>
+        <servlet-class>controller.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
-        <servlet-class>LogoutServlet</servlet-class>
+        <servlet-class>controller.LogoutServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DemoTimeServlet</servlet-name>
-        <servlet-class>DemoTimeServlet</servlet-class>
+        <servlet-class>controller.DemoTimeServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>ParentDashboardServlet</servlet-name>
-        <servlet-class>ParentDashboardServlet</servlet-class>
+        <servlet-class>controller.ParentDashboardServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ParentRegistrationServlet</servlet-name>
-        <servlet-class>ParentRegistrationServlet</servlet-class>
+        <servlet-class>controller.ParentRegistrationServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ParentTripStatusServlet</servlet-name>
-        <servlet-class>ParentTripStatusServlet</servlet-class>
+        <servlet-class>controller.ParentTripStatusServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>ManagerDashboardServlet</servlet-name>
-        <servlet-class>ManagerDashboardServlet</servlet-class>
+        <servlet-class>controller.ManagerDashboardServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ManagerManifestServlet</servlet-name>
-        <servlet-class>ManagerManifestServlet</servlet-class>
+        <servlet-class>controller.ManagerManifestServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ManagerBoardingServlet</servlet-name>
-        <servlet-class>ManagerBoardingServlet</servlet-class>
+        <servlet-class>controller.ManagerBoardingServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ManagerTrackingServlet</servlet-name>
-        <servlet-class>ManagerTrackingServlet</servlet-class>
+        <servlet-class>controller.ManagerTrackingServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>DriverDashboardServlet</servlet-name>
-        <servlet-class>DriverDashboardServlet</servlet-class>
+        <servlet-class>controller.DriverDashboardServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DriverBusStatusServlet</servlet-name>
-        <servlet-class>DriverBusStatusServlet</servlet-class>
+        <servlet-class>controller.DriverBusStatusServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DriverIncidentServlet</servlet-name>
-        <servlet-class>DriverIncidentServlet</servlet-class>
+        <servlet-class>controller.DriverIncidentServlet</servlet-class>
     </servlet>
 
     <servlet>
         <servlet-name>AdminDashboardServlet</servlet-name>
-        <servlet-class>AdminDashboardServlet</servlet-class>
+        <servlet-class>controller.AdminDashboardServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminUserServlet</servlet-name>
-        <servlet-class>AdminUserServlet</servlet-class>
+        <servlet-class>controller.AdminUserServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminStudentsServlet</servlet-name>
-        <servlet-class>AdminStudentsServlet</servlet-class>
+        <servlet-class>controller.AdminStudentsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminBusServlet</servlet-name>
-        <servlet-class>AdminBusServlet</servlet-class>
+        <servlet-class>controller.AdminBusServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AdminRouteServlet</servlet-name>
-        <servlet-class>AdminRouteServlet</servlet-class>
+        <servlet-class>controller.AdminRouteServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
@@ -221,3 +221,4 @@
     </filter-mapping>
 
 </web-app>
+

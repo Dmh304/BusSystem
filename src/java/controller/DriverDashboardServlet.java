@@ -1,3 +1,4 @@
+package controller;
 import dal.BusDAO;
 import dal.IncidentDAO;
 import dal.ManifestDAO;
@@ -42,3 +43,4 @@ public class DriverDashboardServlet extends HttpServlet {
         request.getRequestDispatcher("/driver/dashboard.jsp").forward(request, response);
     }
 }
+
