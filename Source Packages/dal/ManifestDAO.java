@@ -1,0 +1,235 @@
+package dal;
+
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
+import model.ManifestStudent;
+import model.RouteStop;
+import model.TripManifest;
+
+public class ManifestDAO extends DBContext {
+
+    public TripManifest getManifestByManager(int managerUserId, Date tripDate, String sessionType) {
+        String sql = "SELECT TOP 1 tm.ManifestID, tm.AssignmentID, tm.TripDate, tm.SessionType, "
+                + "tm.ManifestStatus, tm.CurrentRouteStopID, tm.DepartureTime, tm.StartedAt, tm.FinishedAt, "
+                + "b.PlateNumber, r.RouteName, sp.StopName AS CurrentStopName "
+                + "FROM TripManifest tm "
+                + "INNER JOIN BusAssignment ba ON tm.AssignmentID = ba.AssignmentID "
+                + "INNER JOIN Bus b ON ba.BusID = b.BusID "
+                + "INNER JOIN Route r ON ba.RouteID = r.RouteID "
+                + "LEFT JOIN RouteStop rs ON tm.CurrentRouteStopID = rs.RouteStopID "
+                + "LEFT JOIN StopPoint sp ON rs.StopID = sp.StopID "
+                + "WHERE ba.ManagerUserID = ? AND tm.TripDate = ? AND tm.SessionType = ?";
+        return getManifest(sql, managerUserId, tripDate, sessionType);
+    }
+
+    public TripManifest getManifestByDriver(int driverUserId, Date tripDate, String sessionType) {
+        String sql = "SELECT TOP 1 tm.ManifestID, tm.AssignmentID, tm.TripDate, tm.SessionType, "
+                + "tm.ManifestStatus, tm.CurrentRouteStopID, tm.DepartureTime, tm.StartedAt, tm.FinishedAt, "
+                + "b.PlateNumber, r.RouteName, sp.StopName AS CurrentStopName "
+                + "FROM TripManifest tm "
+                + "INNER JOIN BusAssignment ba ON tm.AssignmentID = ba.AssignmentID "
+                + "INNER JOIN Bus b ON ba.BusID = b.BusID "
+                + "INNER JOIN Route r ON ba.RouteID = r.RouteID "
+                + "LEFT JOIN RouteStop rs ON tm.CurrentRouteStopID = rs.RouteStopID "
+                + "LEFT JOIN StopPoint sp ON rs.StopID = sp.StopID "
+                + "WHERE ba.DriverUserID = ? AND tm.TripDate = ? AND tm.SessionType = ?";
+        return getManifest(sql, driverUserId, tripDate, sessionType);
+    }
+
+    public List<ManifestStudent> getManifestStudents(int manifestId) {
+        List<ManifestStudent> list = new ArrayList<>();
+        String sql = "SELECT ms.ManifestStudentID, ms.ManifestID, ms.StudentID, ms.AttendanceChoice, "
+                + "ms.BoardingStatus, ms.BoardedAt, ms.Note, "
+                + "s.StudentCode, s.FullName AS StudentName, sp.StopName AS PickupStopName "
+                + "FROM ManifestStudent ms "
+                + "INNER JOIN Student s ON ms.StudentID = s.StudentID "
+                + "INNER JOIN StopPoint sp ON s.DefaultPickupStopID = sp.StopID "
+                + "WHERE ms.ManifestID = ? "
+                + "ORDER BY sp.StopName, s.FullName";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, manifestId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ManifestStudent item = new ManifestStudent();
+                    item.setManifestStudentId(rs.getInt("ManifestStudentID"));
+                    item.setManifestId(rs.getInt("ManifestID"));
+                    item.setStudentId(rs.getInt("StudentID"));
+                    item.setAttendanceChoice(rs.getString("AttendanceChoice"));
+                    item.setBoardingStatus(rs.getString("BoardingStatus"));
+                    item.setBoardedAt(rs.getTimestamp("BoardedAt"));
+                    item.setNote(rs.getString("Note"));
+                    item.setStudentCode(rs.getString("StudentCode"));
+                    item.setStudentName(rs.getString("StudentName"));
+                    item.setPickupStopName(rs.getString("PickupStopName"));
+                    list.add(item);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public boolean updateBoardingStatus(int manifestStudentId, String boardingStatus) {
+        String sql = "UPDATE ManifestStudent "
+                + "SET BoardingStatus = ?, "
+                + "BoardedAt = CASE WHEN ? = 'BOARDED' THEN GETDATE() ELSE NULL END "
+                + "WHERE ManifestStudentID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, boardingStatus);
+            ps.setString(2, boardingStatus);
+            ps.setInt(3, manifestStudentId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateCurrentRouteStop(int manifestId, int routeStopId) {
+        String sql = "UPDATE TripManifest "
+                + "SET CurrentRouteStopID = ?, ManifestStatus = 'RUNNING', "
+                + "StartedAt = CASE WHEN StartedAt IS NULL THEN GETDATE() ELSE StartedAt END "
+                + "WHERE ManifestID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, routeStopId);
+            ps.setInt(2, manifestId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public List<RouteStop> getRouteStopsByManifest(int manifestId) {
+        List<RouteStop> list = new ArrayList<>();
+        String sql = "SELECT rs.RouteStopID, rs.RouteID, rs.StopID, rs.StopOrder, "
+                + "rs.EstimatedMorningTime, rs.EstimatedAfternoonTime, sp.StopName, sp.AddressDetail "
+                + "FROM TripManifest tm "
+                + "INNER JOIN BusAssignment ba ON tm.AssignmentID = ba.AssignmentID "
+                + "INNER JOIN RouteStop rs ON ba.RouteID = rs.RouteID "
+                + "INNER JOIN StopPoint sp ON rs.StopID = sp.StopID "
+                + "WHERE tm.ManifestID = ? "
+                + "ORDER BY rs.StopOrder";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, manifestId);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    RouteStop item = new RouteStop();
+                    item.setRouteStopId(rs.getInt("RouteStopID"));
+                    item.setRouteId(rs.getInt("RouteID"));
+                    item.setStopId(rs.getInt("StopID"));
+                    item.setStopOrder(rs.getInt("StopOrder"));
+                    item.setEstimatedMorningTime(rs.getTime("EstimatedMorningTime"));
+                    item.setEstimatedAfternoonTime(rs.getTime("EstimatedAfternoonTime"));
+                    item.setStopName(rs.getString("StopName"));
+                    item.setAddressDetail(rs.getString("AddressDetail"));
+                    list.add(item);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int countBusStudents(int manifestId) {
+        return countByManifestAndCondition(manifestId, "AND AttendanceChoice = 'BUS'");
+    }
+
+    public int countBoardedStudents(int manifestId) {
+        return countByManifestAndCondition(manifestId, "AND AttendanceChoice = 'BUS' AND BoardingStatus = 'BOARDED'");
+    }
+
+    public int countPendingStudents(int manifestId) {
+        return countByManifestAndCondition(manifestId, "AND AttendanceChoice = 'BUS' AND BoardingStatus = 'PENDING'");
+    }
+
+    public ManifestStudent getStudentTripStatus(int studentId, Date tripDate, String sessionType) {
+        String sql = "SELECT TOP 1 ms.ManifestStudentID, ms.ManifestID, ms.StudentID, ms.AttendanceChoice, "
+                + "ms.BoardingStatus, ms.BoardedAt, ms.Note, tm.SessionType, tm.TripDate, tm.ManifestStatus, "
+                + "sp.StopName AS CurrentStopName "
+                + "FROM ManifestStudent ms "
+                + "INNER JOIN TripManifest tm ON ms.ManifestID = tm.ManifestID "
+                + "LEFT JOIN RouteStop rs ON tm.CurrentRouteStopID = rs.RouteStopID "
+                + "LEFT JOIN StopPoint sp ON rs.StopID = sp.StopID "
+                + "WHERE ms.StudentID = ? AND tm.TripDate = ? AND tm.SessionType = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, studentId);
+            ps.setDate(2, tripDate);
+            ps.setString(3, sessionType);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    ManifestStudent item = new ManifestStudent();
+                    item.setManifestStudentId(rs.getInt("ManifestStudentID"));
+                    item.setManifestId(rs.getInt("ManifestID"));
+                    item.setStudentId(rs.getInt("StudentID"));
+                    item.setAttendanceChoice(rs.getString("AttendanceChoice"));
+                    item.setBoardingStatus(rs.getString("BoardingStatus"));
+                    item.setBoardedAt(rs.getTimestamp("BoardedAt"));
+                    item.setNote(rs.getString("Note"));
+                    item.setSessionType(rs.getString("SessionType"));
+                    item.setTripDate(rs.getDate("TripDate"));
+                    item.setManifestStatus(rs.getString("ManifestStatus"));
+                    item.setCurrentStopName(rs.getString("CurrentStopName"));
+                    return item;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private int countByManifestAndCondition(int manifestId, String condition) {
+        String sql = "SELECT COUNT(*) FROM ManifestStudent WHERE ManifestID = ? " + condition;
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, manifestId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    private TripManifest getManifest(String sql, int userId, Date tripDate, String sessionType) {
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, userId);
+            ps.setDate(2, tripDate);
+            ps.setString(3, sessionType);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    TripManifest manifest = new TripManifest();
+                    manifest.setManifestId(rs.getInt("ManifestID"));
+                    manifest.setAssignmentId(rs.getInt("AssignmentID"));
+                    manifest.setTripDate(rs.getDate("TripDate"));
+                    manifest.setSessionType(rs.getString("SessionType"));
+                    manifest.setManifestStatus(rs.getString("ManifestStatus"));
+                    int currentRouteStopId = rs.getInt("CurrentRouteStopID");
+                    if (rs.wasNull()) {
+                        manifest.setCurrentRouteStopId(null);
+                    } else {
+                        manifest.setCurrentRouteStopId(currentRouteStopId);
+                    }
+                    manifest.setDepartureTime(rs.getTime("DepartureTime"));
+                    manifest.setStartedAt(rs.getTimestamp("StartedAt"));
+                    manifest.setFinishedAt(rs.getTimestamp("FinishedAt"));
+                    manifest.setPlateNumber(rs.getString("PlateNumber"));
+                    manifest.setRouteName(rs.getString("RouteName"));
+                    manifest.setCurrentStopName(rs.getString("CurrentStopName"));
+                    return manifest;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
