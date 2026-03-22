@@ -53,6 +53,23 @@ public class ManagerTrackingServlet extends HttpServlet {
 
         ManifestDAO manifestDAO = new ManifestDAO();
         TripManifest manifest = manifestDAO.getManifestByManager(user.getUserId(), today, sessionType);
+        
+        // Auto-generate manifest if it doesn't exist and lock time has passed
+        if (manifest == null) {
+            boolean lockTimePassed = "MORNING".equalsIgnoreCase(sessionType)
+                    ? !demoTime.isBefore(java.time.LocalTime.of(5, 0))
+                    : !demoTime.isBefore(java.time.LocalTime.of(14, 0));
+            if (lockTimePassed) {
+                var assignment = manifestDAO.getAssignmentByManager(user.getUserId(), today, sessionType);
+                if (assignment != null) {
+                    if (manifestDAO.generateManifestFromRegistrations(
+                            assignment.getAssignmentId(), today, sessionType)) {
+                        manifest = manifestDAO.getManifestByManager(user.getUserId(), today, sessionType);
+                    }
+                }
+            }
+        }
+        
         List<RouteStop> routeStops = manifest == null ? null : manifestDAO.getRouteStopsByManifest(manifest.getManifestId());
 
         request.setAttribute("pageTitle", "Manager Tracking");

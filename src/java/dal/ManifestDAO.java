@@ -45,12 +45,16 @@ public class ManifestDAO extends DBContext {
         List<ManifestStudent> list = new ArrayList<>();
         String sql = "SELECT ms.ManifestStudentID, ms.ManifestID, ms.StudentID, ms.AttendanceChoice, "
                 + "ms.BoardingStatus, ms.BoardedAt, ms.Note, "
-                + "s.StudentCode, s.FullName AS StudentName, sp.StopName AS PickupStopName "
+                + "s.StudentCode, s.FullName AS StudentName, sp.StopName AS PickupStopName, "
+                + "ISNULL(rs.StopOrder, 0) AS PickupStopOrder "
                 + "FROM ManifestStudent ms "
                 + "INNER JOIN Student s ON ms.StudentID = s.StudentID "
                 + "INNER JOIN StopPoint sp ON s.DefaultPickupStopID = sp.StopID "
+                + "INNER JOIN TripManifest tm ON ms.ManifestID = tm.ManifestID "
+                + "INNER JOIN BusAssignment ba ON tm.AssignmentID = ba.AssignmentID "
+                + "LEFT JOIN RouteStop rs ON rs.StopID = s.DefaultPickupStopID AND rs.RouteID = ba.RouteID "
                 + "WHERE ms.ManifestID = ? "
-                + "ORDER BY sp.StopName, s.FullName";
+                + "ORDER BY rs.StopOrder, s.FullName";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, manifestId);
             try (ResultSet rs = ps.executeQuery()) {
@@ -66,6 +70,7 @@ public class ManifestDAO extends DBContext {
                     item.setStudentCode(rs.getString("StudentCode"));
                     item.setStudentName(rs.getString("StudentName"));
                     item.setPickupStopName(rs.getString("PickupStopName"));
+                    item.setPickupStopOrder(rs.getInt("PickupStopOrder"));
                     list.add(item);
                 }
             }
@@ -89,6 +94,28 @@ public class ManifestDAO extends DBContext {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * Get the StopOrder of the current route stop for a manifest.
+     * Returns 0 if the trip hasn't started (no current stop).
+     */
+    public int getCurrentStopOrder(int manifestId) {
+        String sql = "SELECT ISNULL(rs.StopOrder, 0) AS StopOrder "
+                + "FROM TripManifest tm "
+                + "INNER JOIN RouteStop rs ON tm.CurrentRouteStopID = rs.RouteStopID "
+                + "WHERE tm.ManifestID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, manifestId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("StopOrder");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0; // Trip not started or no current stop
     }
 
     public boolean updateCurrentRouteStop(int manifestId, int routeStopId) {
@@ -231,6 +258,21 @@ public class ManifestDAO extends DBContext {
             e.printStackTrace();
         }
         return false;
+    }
+
+    /**
+     * Sync manifest students - if manifest exists but has no students,
+     * re-populate from DailyTripRegistration.
+     * This handles the case where manifest was created before parents registered.
+     */
+    public boolean syncManifestStudents(int manifestId, Date tripDate, String sessionType) {
+        // Check if manifest already has students
+        int studentCount = countByManifestAndCondition(manifestId, "");
+        if (studentCount > 0) {
+            return true; // Already has students, no need to sync
+        }
+        // No students yet, try to populate from registrations
+        return createManifestStudentsFromRegistrations(manifestId, tripDate, sessionType);
     }
 
     public ManifestStudent getStudentTripStatus(int studentId, Date tripDate, String sessionType) {
