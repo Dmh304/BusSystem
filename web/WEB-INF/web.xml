@@ -40,6 +40,10 @@
         <servlet-name>ParentTripStatusServlet</servlet-name>
         <servlet-class>controller.ParentTripStatusServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ParentChildrenServlet</servlet-name>
+        <servlet-class>controller.ParentChildrenServlet</servlet-class>
+    </servlet>
 
     <servlet>
         <servlet-name>ManagerDashboardServlet</servlet-name>
@@ -116,6 +120,10 @@
     <servlet-mapping>
         <servlet-name>ParentTripStatusServlet</servlet-name>
         <url-pattern>/parent/trip-status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ParentChildrenServlet</servlet-name>
+        <url-pattern>/parent/children</url-pattern>
     </servlet-mapping>
 
     <servlet-mapping>

@@ -1,54 +1,36 @@
 package controller;
+
 import dal.RouteDAO;
 import dal.StudentDAO;
-import dal.UserDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import model.UserAccount;
 import util.SessionUtil;
 
-public class AdminStudentsServlet extends HttpServlet {
+public class ParentChildrenServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String keyword = request.getParameter("keyword");
-        String parentIdStr = request.getParameter("parentId");
-        Integer parentId = null;
-        if (parentIdStr != null && !parentIdStr.trim().isEmpty()) {
-            try { parentId = Integer.parseInt(parentIdStr); } catch (Exception e) {}
-        }
+        UserAccount user = SessionUtil.getCurrentUser(request.getSession(false));
 
         StudentDAO studentDAO = new StudentDAO();
         RouteDAO routeDAO = new RouteDAO();
-        UserDAO userDAO = new UserDAO();
 
-        request.setAttribute("pageTitle", "Admin Students");
-        request.setAttribute("students", studentDAO.getAllStudents(keyword, parentId));
-        request.setAttribute("keyword", keyword);
-        request.setAttribute("selectedParentId", parentId);
+        request.setAttribute("pageTitle", "My Children");
+        request.setAttribute("students", studentDAO.getStudentsByParent(user.getUserId()));
         request.setAttribute("routes", routeDAO.getAllRoutes());
         request.setAttribute("stopPoints", routeDAO.getAllStopPoints());
-        request.setAttribute("parents", userDAO.getAllUsers(null, "PARENT"));
-
-        // Build routeStopsJson for JS: { routeId: lastStopId, ... }
-        StringBuilder json = new StringBuilder("{");
-        for (model.Route r : routeDAO.getAllRoutes()) {
-            int schoolStopId = routeDAO.getSchoolStopId(r.getRouteId());
-            if (json.length() > 1) json.append(",");
-            json.append("\"").append(r.getRouteId()).append("\":").append(schoolStopId);
-        }
-        json.append("}");
-        request.setAttribute("routeSchoolMap", json.toString());
-
-        request.getRequestDispatcher("/admin/students.jsp").forward(request, response);
+        request.getRequestDispatcher("/parent/children.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        UserAccount user = SessionUtil.getCurrentUser(request.getSession(false));
         String action = request.getParameter("action");
         StudentDAO studentDAO = new StudentDAO();
         RouteDAO routeDAO = new RouteDAO();
@@ -59,20 +41,14 @@ public class AdminStudentsServlet extends HttpServlet {
                 String fullName = request.getParameter("fullName");
                 String gender = request.getParameter("gender");
                 String grade = request.getParameter("grade");
-                int parentUserId = Integer.parseInt(request.getParameter("parentUserId"));
                 int routeId = Integer.parseInt(request.getParameter("routeId"));
                 int pickupStopId = Integer.parseInt(request.getParameter("pickupStopId"));
                 int dropoffStopId = routeDAO.getSchoolStopId(routeId);
 
                 boolean ok = studentDAO.addStudent(studentCode, fullName, gender, grade,
-                        parentUserId, routeId, pickupStopId, dropoffStopId);
-                if (ok) SessionUtil.setSuccess(request.getSession(), "Student added successfully.");
-                else SessionUtil.setError(request.getSession(), "Failed to add student.");
-
-                // Redirect back with parentId preserved
-                String parentId = request.getParameter("parentUserId");
-                response.sendRedirect(request.getContextPath() + "/admin/students?parentId=" + parentId);
-                return;
+                        user.getUserId(), routeId, pickupStopId, dropoffStopId);
+                if (ok) SessionUtil.setSuccess(request.getSession(), "Child added successfully.");
+                else SessionUtil.setError(request.getSession(), "Failed to add child.");
             } else if ("edit".equals(action)) {
                 int studentId = Integer.parseInt(request.getParameter("studentId"));
                 String fullName = request.getParameter("fullName");
@@ -84,19 +60,19 @@ public class AdminStudentsServlet extends HttpServlet {
 
                 boolean ok = studentDAO.updateStudent(studentId, fullName, gender, grade,
                         routeId, pickupStopId, dropoffStopId);
-                if (ok) SessionUtil.setSuccess(request.getSession(), "Student updated successfully.");
-                else SessionUtil.setError(request.getSession(), "Failed to update student.");
+                if (ok) SessionUtil.setSuccess(request.getSession(), "Child updated successfully.");
+                else SessionUtil.setError(request.getSession(), "Failed to update child.");
             } else if ("delete".equals(action)) {
                 int studentId = Integer.parseInt(request.getParameter("studentId"));
                 boolean ok = studentDAO.deleteStudent(studentId);
-                if (ok) SessionUtil.setSuccess(request.getSession(), "Student deleted successfully.");
-                else SessionUtil.setError(request.getSession(), "Cannot delete student. They might have associated records.");
+                if (ok) SessionUtil.setSuccess(request.getSession(), "Child deleted successfully.");
+                else SessionUtil.setError(request.getSession(), "Cannot delete child. They might have associated records.");
             }
         } catch (Exception e) {
             e.printStackTrace();
             SessionUtil.setError(request.getSession(), "An error occurred: " + e.getMessage());
         }
 
-        response.sendRedirect(request.getContextPath() + "/admin/students");
+        response.sendRedirect(request.getContextPath() + "/parent/children");
     }
 }

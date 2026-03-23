@@ -37,7 +37,7 @@ public class StudentDAO extends DBContext {
         return list;
     }
 
-    public List<Student> getAllStudents(String keyword) {
+    public List<Student> getAllStudents(String keyword, Integer parentUserId) {
         List<Student> list = new ArrayList<>();
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT s.StudentID, s.ParentUserID, s.StudentCode, s.FullName, s.Gender, s.Grade, ");
@@ -53,14 +53,21 @@ public class StudentDAO extends DBContext {
         if (keyword != null && !keyword.trim().isEmpty()) {
             sql.append("AND (s.FullName LIKE ? OR s.StudentCode LIKE ? OR u.FullName LIKE ?) ");
         }
+        if (parentUserId != null) {
+            sql.append("AND s.ParentUserID = ? ");
+        }
         sql.append("ORDER BY s.StudentID");
 
         try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
+            int idx = 1;
             if (keyword != null && !keyword.trim().isEmpty()) {
                 String value = "%" + keyword.trim() + "%";
-                ps.setString(1, value);
-                ps.setString(2, value);
-                ps.setString(3, value);
+                ps.setString(idx++, value);
+                ps.setString(idx++, value);
+                ps.setString(idx++, value);
+            }
+            if (parentUserId != null) {
+                ps.setInt(idx++, parentUserId);
             }
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
@@ -108,6 +115,58 @@ public class StudentDAO extends DBContext {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public boolean addStudent(String studentCode, String fullName, String gender, String grade,
+            int parentUserId, int routeId, int pickupStopId, int dropoffStopId) {
+        String sql = "INSERT INTO Student (ParentUserID, StudentCode, FullName, Gender, Grade, "
+                + "DefaultRouteID, DefaultPickupStopID, DefaultDropoffStopID, [Status]) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'ACTIVE')";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, parentUserId);
+            ps.setString(2, studentCode);
+            ps.setString(3, fullName);
+            ps.setString(4, gender);
+            ps.setString(5, grade);
+            ps.setInt(6, routeId);
+            ps.setInt(7, pickupStopId);
+            ps.setInt(8, dropoffStopId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean deleteStudent(int studentId) {
+        String sql = "DELETE FROM Student WHERE StudentID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, studentId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean updateStudent(int studentId, String fullName, String gender, String grade,
+            int routeId, int pickupStopId, int dropoffStopId) {
+        String sql = "UPDATE Student SET FullName = ?, Gender = ?, Grade = ?, "
+                + "DefaultRouteID = ?, DefaultPickupStopID = ?, DefaultDropoffStopID = ? "
+                + "WHERE StudentID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, fullName);
+            ps.setString(2, gender);
+            ps.setString(3, grade);
+            ps.setInt(4, routeId);
+            ps.setInt(5, pickupStopId);
+            ps.setInt(6, dropoffStopId);
+            ps.setInt(7, studentId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private Student extractStudent(ResultSet rs) throws Exception {
