@@ -158,6 +158,43 @@ CREATE TABLE BusAssignment (
 );
 GO
 
+-- Clean up any duplicate assignments BEFORE creating UNIQUE indexes
+-- Keep the OLDEST assignment for each manager/driver, deactivate newer ones
+WITH DuplicateManager AS (
+    SELECT 
+        AssignmentID,
+        ManagerUserID,
+        ROW_NUMBER() OVER (PARTITION BY ManagerUserID ORDER BY AssignmentID ASC) as rn
+    FROM BusAssignment
+    WHERE [Status] = 'ACTIVE' AND ManagerUserID IS NOT NULL
+),
+DuplicateDriver AS (
+    SELECT 
+        AssignmentID,
+        DriverUserID,
+        ROW_NUMBER() OVER (PARTITION BY DriverUserID ORDER BY AssignmentID ASC) as rn
+    FROM BusAssignment
+    WHERE [Status] = 'ACTIVE' AND DriverUserID IS NOT NULL
+)
+UPDATE BusAssignment
+SET [Status] = 'INACTIVE'
+WHERE AssignmentID IN (
+    SELECT AssignmentID FROM DuplicateManager WHERE rn > 1
+    UNION
+    SELECT AssignmentID FROM DuplicateDriver WHERE rn > 1
+);
+GO
+
+-- Add UNIQUE indexes to prevent duplicate active assignments for same manager/driver
+CREATE UNIQUE INDEX UX_BusAssignment_Manager_Active 
+    ON BusAssignment(ManagerUserID) 
+    WHERE [Status] = 'ACTIVE' AND ManagerUserID IS NOT NULL;
+
+CREATE UNIQUE INDEX UX_BusAssignment_Driver_Active 
+    ON BusAssignment(DriverUserID) 
+    WHERE [Status] = 'ACTIVE' AND DriverUserID IS NOT NULL;
+GO
+
 CREATE TABLE Student (
     StudentID INT IDENTITY(1,1) PRIMARY KEY,
     ParentUserID INT NOT NULL,

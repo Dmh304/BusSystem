@@ -202,4 +202,63 @@ public class BusDAO extends DBContext {
         }
         return false;
     }
+
+    public boolean hasManagerAssignment(int managerUserId) {
+        String sql = "SELECT COUNT(*) FROM BusAssignment WHERE ManagerUserID = ? AND [Status] = 'ACTIVE'";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, managerUserId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public boolean hasDriverAssignment(int driverUserId) {
+        String sql = "SELECT COUNT(*) FROM BusAssignment WHERE DriverUserID = ? AND [Status] = 'ACTIVE'";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, driverUserId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1) > 0;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public String createBusAssignmentWithValidation(int busId, int routeId, int managerUserId, int driverUserId) {
+        // Check if manager already has an assignment
+        if (hasManagerAssignment(managerUserId)) {
+            return "ERROR_MANAGER_ALREADY_ASSIGNED";
+        }
+        
+        // Check if driver already has an assignment
+        if (hasDriverAssignment(driverUserId)) {
+            return "ERROR_DRIVER_ALREADY_ASSIGNED";
+        }
+        
+        // Try to create the assignment
+        String sql = "INSERT INTO BusAssignment (BusID, RouteID, ManagerUserID, DriverUserID, [Status]) "
+                + "VALUES (?, ?, ?, ?, 'ACTIVE')";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, busId);
+            ps.setInt(2, routeId);
+            ps.setInt(3, managerUserId);
+            ps.setInt(4, driverUserId);
+            if (ps.executeUpdate() > 0) {
+                return "SUCCESS";
+            }
+            return "ERROR_FAILED_TO_ASSIGN";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "ERROR_DATABASE";
+        }
+    }
 }

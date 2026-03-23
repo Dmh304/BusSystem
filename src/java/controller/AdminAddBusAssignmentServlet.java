@@ -71,10 +71,17 @@ public class AdminAddBusAssignmentServlet extends HttpServlet {
                     int managerUserId = Integer.parseInt(managerUserIdStr);
                     int driverUserId = Integer.parseInt(driverUserIdStr);
 
-                    if (busDAO.createBusAssignment(busId, routeId, managerUserId, driverUserId)) {
+                    String result = busDAO.createBusAssignmentWithValidation(busId, routeId, managerUserId, driverUserId);
+                    if ("SUCCESS".equals(result)) {
                         message = "success:Bus assignment created successfully";
-                    } else {
+                    } else if ("ERROR_MANAGER_ALREADY_ASSIGNED".equals(result)) {
+                        message = "error:Manager đã được gán cho một xe bus khác. Không thể thay đổi";
+                    } else if ("ERROR_DRIVER_ALREADY_ASSIGNED".equals(result)) {
+                        message = "error:Driver đã được gán cho một xe bus khác. Không thể thay đổi";
+                    } else if ("ERROR_FAILED_TO_ASSIGN".equals(result)) {
                         message = "error:Failed to assign bus";
+                    } else {
+                        message = "error:Database error occurred";
                     }
                 } catch (NumberFormatException e) {
                     message = "error:Invalid data";
