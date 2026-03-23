@@ -8,20 +8,13 @@
         <jsp:include page="/common/demo-time-control.jsp"></jsp:include>
 
         <div class="card">
-            <h2>Student Management</h2>
-            <form action="${pageContext.request.contextPath}/admin/students" method="get">
-                <input type="text" name="keyword" value="${keyword}" placeholder="Search by code, name, parent">
-                <button type="submit">Search</button>
-                <button type="button" onclick="showAddForm()" style="padding: 8px 15px; margin-left: 10px; background-color: #28a745; color: white; border: none; cursor: pointer; border-radius: 4px;">Add New Student</button>
-                <c:if test="${selectedParentId != null}">
-                    <a href="${pageContext.request.contextPath}/admin/students" style="padding: 8px 15px; margin-left: 10px; background-color: #6c757d; color: white; border: none; cursor: pointer; border-radius: 4px; text-decoration: none;">Show All Students</a>
-                </c:if>
-            </form>
+            <h2>My Children</h2>
+            <button type="button" onclick="showAddForm()" style="padding: 8px 15px; background-color: #28a745; color: white; border: none; cursor: pointer; border-radius: 4px;">Add New Child</button>
         </div>
 
-        <div class="card" id="studentFormDiv" style="display: none; background-color: #f8f9fa; border: 1px solid #ddd;">
-            <h3 id="formTitle" style="margin-top: 0;">Add Student</h3>
-            <form action="${pageContext.request.contextPath}/admin/students" method="post">
+        <div class="card" id="childFormDiv" style="display: none; background-color: #f8f9fa; border: 1px solid #ddd;">
+            <h3 id="formTitle" style="margin-top: 0;">Add Child</h3>
+            <form action="${pageContext.request.contextPath}/parent/children" method="post">
                 <input type="hidden" name="action" id="formAction" value="add">
                 <input type="hidden" name="studentId" id="studentId" value="">
                 <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center;">
@@ -35,12 +28,6 @@
                     <input type="text" name="grade" id="grade" placeholder="Grade" required style="padding: 8px;">
                 </div>
                 <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 10px;">
-                    <select name="parentUserId" id="parentUserId" required style="padding: 8px;">
-                        <option value="">-- Select Parent --</option>
-                        <c:forEach items="${parents}" var="p">
-                            <option value="${p.userId}" ${selectedParentId == p.userId ? 'selected' : ''}>${p.fullName} (${p.username})</option>
-                        </c:forEach>
-                    </select>
                     <select name="routeId" id="routeId" required style="padding: 8px;">
                         <option value="">-- Select Route --</option>
                         <c:forEach items="${routes}" var="r">
@@ -69,9 +56,9 @@
                     <th>Full Name</th>
                     <th>Gender</th>
                     <th>Grade</th>
-                    <th>Parent</th>
-                    <th>Pickup Stop</th>
                     <th>Route</th>
+                    <th>Pickup Stop</th>
+                    <th>Dropoff Stop</th>
                     <th>Actions</th>
                 </tr>
                 <c:forEach items="${students}" var="item">
@@ -80,9 +67,9 @@
                         <td>${item.fullName}</td>
                         <td>${item.gender}</td>
                         <td>${item.grade}</td>
-                        <td>${item.parentName}</td>
-                        <td>${item.pickupStopName}</td>
                         <td>${item.routeName}</td>
+                        <td>${item.pickupStopName}</td>
+                        <td>${item.dropoffStopName}</td>
                         <td>
                             <button type="button" onclick="showEditForm(this)"
                                 data-id="${item.studentId}"
@@ -90,12 +77,11 @@
                                 data-fullname="${item.fullName}"
                                 data-gender="${item.gender}"
                                 data-grade="${item.grade}"
-                                data-parent="${item.parentUserId}"
                                 data-route="${item.defaultRouteId}"
                                 data-pickup="${item.defaultPickupStopId}"
                                 style="padding: 5px 10px; cursor: pointer; border: none; background-color: #ffc107; border-radius: 4px;">Edit</button>
 
-                            <form action="${pageContext.request.contextPath}/admin/students" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this student?');">
+                            <form action="${pageContext.request.contextPath}/parent/children" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this child?');">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="studentId" value="${item.studentId}">
                                 <button type="submit" style="padding: 5px 10px; cursor: pointer; border: none; background-color: #dc3545; color: white; border-radius: 4px;">Delete</button>
@@ -108,8 +94,8 @@
 
         <script>
         function showAddForm() {
-            document.getElementById('studentFormDiv').style.display = 'block';
-            document.getElementById('formTitle').innerText = 'Add Student';
+            document.getElementById('childFormDiv').style.display = 'block';
+            document.getElementById('formTitle').innerText = 'Add Child';
             document.getElementById('formAction').value = 'add';
             document.getElementById('studentId').value = '';
             document.getElementById('studentCode').value = '';
@@ -117,20 +103,13 @@
             document.getElementById('fullName').value = '';
             document.getElementById('gender').value = '';
             document.getElementById('grade').value = '';
-            var selectedParent = '${selectedParentId}';
-            if (selectedParent) {
-                document.getElementById('parentUserId').value = selectedParent;
-            } else {
-                document.getElementById('parentUserId').value = '';
-            }
-            document.getElementById('parentUserId').disabled = false;
             document.getElementById('routeId').value = '';
             document.getElementById('pickupStopId').value = '';
         }
 
         function showEditForm(btn) {
-            document.getElementById('studentFormDiv').style.display = 'block';
-            document.getElementById('formTitle').innerText = 'Edit Student';
+            document.getElementById('childFormDiv').style.display = 'block';
+            document.getElementById('formTitle').innerText = 'Edit Child';
             document.getElementById('formAction').value = 'edit';
             document.getElementById('studentId').value = btn.getAttribute('data-id');
             document.getElementById('studentCode').value = btn.getAttribute('data-code');
@@ -138,14 +117,12 @@
             document.getElementById('fullName').value = btn.getAttribute('data-fullname');
             document.getElementById('gender').value = btn.getAttribute('data-gender');
             document.getElementById('grade').value = btn.getAttribute('data-grade');
-            document.getElementById('parentUserId').value = btn.getAttribute('data-parent');
-            document.getElementById('parentUserId').disabled = true;
             document.getElementById('routeId').value = btn.getAttribute('data-route');
             document.getElementById('pickupStopId').value = btn.getAttribute('data-pickup');
         }
 
         function hideForm() {
-            document.getElementById('studentFormDiv').style.display = 'none';
+            document.getElementById('childFormDiv').style.display = 'none';
         }
         </script>
     </div>

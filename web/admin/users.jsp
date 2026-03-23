@@ -96,7 +96,7 @@
                                 </form>
                                 
                                 <c:if test="${item.roleName == 'PARENT'}">
-                                    <a href="${pageContext.request.contextPath}/admin/students?keyword=${item.fullName}" style="display:inline-block; padding: 5px 10px; background-color: #17a2b8; color: white; text-decoration: none; border-radius: 4px; margin-left: 5px; font-size: 13px;">View Children</a>
+                                    <a href="${pageContext.request.contextPath}/admin/students?parentId=${item.userId}" style="display:inline-block; padding: 5px 10px; background-color: #17a2b8; color: white; text-decoration: none; border-radius: 4px; margin-left: 5px; font-size: 13px;">View Children</a>
                                 </c:if>
                             </c:if>
                         </td>

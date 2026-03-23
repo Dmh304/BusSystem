@@ -7,6 +7,7 @@
 <div class="sidebar-nav">
     <% if ("PARENT".equals(roleName)) { %>
         <a href="<%= request.getContextPath() %>/parent/dashboard" class="<%= currentPath.contains("/parent/dashboard") ? "active" : "" %>">Dashboard</a>
+        <a href="<%= request.getContextPath() %>/parent/children" class="<%= currentPath.contains("/parent/children") ? "active" : "" %>">My Children</a>
         <a href="<%= request.getContextPath() %>/parent/registration" class="<%= currentPath.contains("/parent/registration") ? "active" : "" %>">Registration</a>
         <a href="<%= request.getContextPath() %>/parent/trip-status" class="<%= currentPath.contains("/parent/trip-status") ? "active" : "" %>">Trip Status</a>
     <% } else if ("MANAGER".equals(roleName)) { %>

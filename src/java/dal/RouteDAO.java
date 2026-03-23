@@ -58,4 +58,37 @@ public class RouteDAO extends DBContext {
         }
         return list;
     }
+    public List<RouteStop> getAllStopPoints() {
+        List<RouteStop> list = new ArrayList<>();
+        String sql = "SELECT StopID, StopName, AddressDetail FROM StopPoint ORDER BY StopName";
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                RouteStop stop = new RouteStop();
+                stop.setStopId(rs.getInt("StopID"));
+                stop.setStopName(rs.getString("StopName"));
+                stop.setAddressDetail(rs.getString("AddressDetail"));
+                list.add(stop);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    public int getSchoolStopId(int routeId) {
+        String sql = "SELECT TOP 1 rs.StopID FROM RouteStop rs "
+                + "WHERE rs.RouteID = ? ORDER BY rs.StopOrder DESC";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, routeId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("StopID");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }
