@@ -14,6 +14,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Set cache control headers
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
+        
         UserAccount currentUser = SessionUtil.getCurrentUser(request.getSession(false));
         if (currentUser != null) {
             response.sendRedirect(request.getContextPath() + SessionUtil.redirectDashboard(currentUser));
@@ -26,6 +31,11 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Set cache control headers
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setHeader("Expires", "0");
+        
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
