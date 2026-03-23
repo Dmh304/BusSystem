@@ -36,9 +36,33 @@ public class SessionUtil {
         }
     }
 
+    public static String getSuccess(HttpSession session) {
+        if (session == null) {
+            return null;
+        }
+        Object value = session.getAttribute(SUCCESS_MESSAGE);
+        return (value instanceof String) ? (String) value : null;
+    }
+
     public static void setError(HttpSession session, String message) {
         if (session != null) {
             session.setAttribute(ERROR_MESSAGE, message);
+        }
+    }
+
+    public static String getError(HttpSession session) {
+        if (session == null) {
+            return null;
+        }
+        Object value = session.getAttribute(ERROR_MESSAGE);
+        return (value instanceof String) ? (String) value : null;
+    }
+
+    public static void clearAll(HttpSession session) {
+        if (session != null) {
+            session.removeAttribute(CURRENT_USER);
+            session.removeAttribute(SUCCESS_MESSAGE);
+            session.removeAttribute(ERROR_MESSAGE);
         }
     }
 
